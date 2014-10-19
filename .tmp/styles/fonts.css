@@ -1,0 +1,55 @@
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/weebly_assets/font/ProximaNova-Reg.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-style: italic;
+  font-weight: normal;
+  src: url('/weebly_assets/font/ProximaNova-RegIt.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: lighter;
+  font-style: normal;
+  src: url('/weebly_assets/font/ProximaNova-Light.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: lighter;
+  font-style: italic;
+  src: url('/weebly_assets/font/ProximaNova-LightIt.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/weebly_assets/font/ProximaNova-SBold.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'VAGRoundedStd';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/weebly_assets/font/VAGRoundedStd-Bold.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'VAGRoundedStd';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/weebly_assets/font/VAGRoundedStd-Light.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'VAGRoundedStd';
+  font-weight: lighter;
+  font-style: normal;
+  src: url('/weebly_assets/font/VAGRoundedStd-Thin.otf') format('opentype');
+  /* Modern Browsers */ }

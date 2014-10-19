@@ -1,0 +1,123 @@
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/weebly_assets/font/ProximaNova-Reg.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-style: italic;
+  font-weight: normal;
+  src: url('/weebly_assets/font/ProximaNova-RegIt.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: lighter;
+  font-style: normal;
+  src: url('/weebly_assets/font/ProximaNova-Light.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: lighter;
+  font-style: italic;
+  src: url('/weebly_assets/font/ProximaNova-LightIt.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'ProximaNova';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/weebly_assets/font/ProximaNova-SBold.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'VAGRoundedStd';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/weebly_assets/font/VAGRoundedStd-Bold.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'VAGRoundedStd';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/weebly_assets/font/VAGRoundedStd-Light.otf') format('opentype');
+  /* Modern Browsers */ }
+
+@font-face {
+  font-family: 'VAGRoundedStd';
+  font-weight: lighter;
+  font-style: normal;
+  src: url('/weebly_assets/font/VAGRoundedStd-Thin.otf') format('opentype');
+  /* Modern Browsers */ }
+
+/* Variables */
+body {
+  background: #ffffff;
+  font-family: "ProximaNova", Helvetica, Arial, sans-serif;
+  color: #4f657b;
+  margin: 0;
+  padding-top: 40px;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0; }
+
+.container {
+  height: 100%; }
+
+.fill-width {
+  width: 100%; }
+
+.button {
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 6px; }
+  .button:last-child {
+    margin-bottom: 0; }
+  .button.primary {
+    background: #518dca; }
+
+#title-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  padding-left: 25px;
+  padding-right: 25px;
+  width: 100%;
+  height: 40px;
+  background: #518dca;
+  box-shadow: 0px 0px 1px 1px #1a2733; }
+
+#page-drawer {
+  float: left;
+  width: 235px;
+  height: 100%;
+  background: #2c3e50;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: lighter; }
+  #page-drawer .header {
+    background: #4f657b;
+    color: #9cb3ca;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    border-top: solid 2px #1a2733;
+    border-bottom: solid 2px #1a2733; }
+  #page-drawer .section {
+    padding: 20px; }
+
+#page-container {
+  background: #ffffff;
+  position: absolute;
+  top: 40px;
+  left: 235px;
+  right: 0;
+  bottom: 0;
+  padding: 40px; }
