@@ -2,7 +2,7 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
-  <title>Code</title>
+    <title>Code</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/favicon.ico">
@@ -12,7 +12,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/weebly/styles/main.css">
     <!-- endbuild -->
   </head>
   <body>
@@ -20,7 +20,7 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div id="title-bar">
-      <img class="weebly-logo" src="/weebly_assets/sprites/Weebly-logo.png" />
+      <img class="weebly-logo" src="/weebly/weebly_assets/sprites/Weebly-Logo.png" />
     </div>
 
     <div class="container">
@@ -97,7 +97,7 @@
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

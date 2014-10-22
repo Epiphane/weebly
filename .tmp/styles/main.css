@@ -2,56 +2,56 @@
   font-family: 'ProximaNova';
   font-weight: normal;
   font-style: normal;
-  src: url('/weebly_assets/font/ProximaNova-Reg.otf') format('opentype');
+  src: url('../weebly_assets/font/ProximaNova-Reg.otf') format('opentype');
   /* Modern Browsers */ }
 
 @font-face {
   font-family: 'ProximaNova';
   font-style: italic;
   font-weight: normal;
-  src: url('/weebly_assets/font/ProximaNova-RegIt.otf') format('opentype');
+  src: url('../weebly_assets/font/ProximaNova-RegIt.otf') format('opentype');
   /* Modern Browsers */ }
 
 @font-face {
   font-family: 'ProximaNova';
   font-weight: lighter;
   font-style: normal;
-  src: url('/weebly_assets/font/ProximaNova-Light.otf') format('opentype');
+  src: url('../weebly_assets/font/ProximaNova-Light.otf') format('opentype');
   /* Modern Browsers */ }
 
 @font-face {
   font-family: 'ProximaNova';
   font-weight: lighter;
   font-style: italic;
-  src: url('/weebly_assets/font/ProximaNova-LightIt.otf') format('opentype');
+  src: url('../weebly_assets/font/ProximaNova-LightIt.otf') format('opentype');
   /* Modern Browsers */ }
 
 @font-face {
   font-family: 'ProximaNova';
   font-weight: bold;
   font-style: normal;
-  src: url('/weebly_assets/font/ProximaNova-SBold.otf') format('opentype');
+  src: url('../weebly_assets/font/ProximaNova-SBold.otf') format('opentype');
   /* Modern Browsers */ }
 
 @font-face {
   font-family: 'VAGRoundedStd';
   font-weight: bold;
   font-style: normal;
-  src: url('/weebly_assets/font/VAGRoundedStd-Bold.otf') format('opentype');
+  src: url('../weebly_assets/font/VAGRoundedStd-Bold.otf') format('opentype');
   /* Modern Browsers */ }
 
 @font-face {
   font-family: 'VAGRoundedStd';
   font-weight: normal;
   font-style: normal;
-  src: url('/weebly_assets/font/VAGRoundedStd-Light.otf') format('opentype');
+  src: url('../weebly_assets/font/VAGRoundedStd-Light.otf') format('opentype');
   /* Modern Browsers */ }
 
 @font-face {
   font-family: 'VAGRoundedStd';
   font-weight: lighter;
   font-style: normal;
-  src: url('/weebly_assets/font/VAGRoundedStd-Thin.otf') format('opentype');
+  src: url('../weebly_assets/font/VAGRoundedStd-Thin.otf') format('opentype');
   /* Modern Browsers */ }
 
 /* Variables */
@@ -69,18 +69,80 @@ body {
 .container {
   height: 100%; }
 
-.fill-width {
-  width: 100%; }
+.full-width {
+  width: 100%;
+  float: left; }
+
+.half-width {
+  width: 50%;
+  float: left; }
+
+.pull-right {
+  float: right; }
 
 .button {
-  display: block;
-  padding: 10px 15px;
-  margin-bottom: 8px;
-  border-radius: 6px; }
-  .button:last-child {
-    margin-bottom: 0; }
+  cursor: pointer;
+  padding: 10px 40px;
+  display: inline-block;
+  text-transform: uppercase;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: bolder; }
+  .button .weebly-icon.pull-right {
+    margin-right: -5px;
+    margin-top: 1px; }
+  .button .fade {
+    opacity: 0.5;
+    -webkit-transition: opacity ease 0.4s;
+            transition: opacity ease 0.4s; }
+  .button:hover .fade {
+    opacity: 1; }
   .button.primary {
-    background: #518dca; }
+    background: #518dca;
+    border: 1px solid #6399cf;
+    color: #ffffff;
+    box-shadow: 0px 2px 1px 0px #1a2733; }
+  .button.secondary {
+    background: #97aabc;
+    border: 2px solid #8498ac;
+    color: #ffffff; }
+  .button.tertiary {
+    border: 2px solid #4f657b; }
+
+input[type='text'] {
+  background: none;
+  color: #ffffff;
+  outline: 0; }
+  input[type='text']::-webkit-input-placeholder {
+    color: #4f657b; }
+  input[type='text']:-moz-placeholder {
+    /* Firefox 18- */
+    color: #4f657b; }
+  input[type='text']::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #4f657b; }
+  input[type='text']:-ms-input-placeholder {
+    color: #4f657b; }
+  input[type='text']:focus + .focus-blue {
+    background-position-y: -70px; }
+
+.input-with-icon {
+  position: relative; }
+  .input-with-icon .weebly-icon {
+    position: absolute;
+    top: 11px;
+    right: 10px; }
+  .input-with-icon .fade {
+    opacity: 0.5;
+    -webkit-transition: opacity ease 0.4s;
+            transition: opacity ease 0.4s; }
+  .input-with-icon:hover .fade {
+    opacity: 1; }
+  .input-with-icon input:focus + .fade.weebly-icon {
+    opacity: 1; }
+  .input-with-icon input[type='submit'].weebly-icon {
+    border: 0;
+    text-indent: -999px; }
 
 #title-bar {
   position: fixed;
@@ -102,16 +164,84 @@ body {
   text-transform: uppercase;
   text-align: center;
   font-weight: lighter; }
+  #page-drawer .button {
+    display: block;
+    padding: 8px 18px;
+    margin-bottom: 8px; }
+    #page-drawer .button:last-child {
+      margin-bottom: 0; }
+  #page-drawer input[type='text'].button {
+    padding: 8px 16px 8px 15px; }
   #page-drawer .header {
     background: #4f657b;
     color: #9cb3ca;
-    padding: 8px;
+    padding: 8px 0 7px;
     font-size: 13px;
-    font-weight: bold;
+    font-weight: bolder;
     border-top: solid 2px #1a2733;
-    border-bottom: solid 2px #1a2733; }
+    border-bottom: solid 2px #1a2733;
+    float: left;
+    width: 100%; }
   #page-drawer .section {
-    padding: 20px; }
+    float: left; }
+    #page-drawer .section.clickable {
+      background: #34485c; }
+      #page-drawer .section.clickable.half-width:nth-child(-n+2) {
+        box-shadow: inset 0 20px 20px -20px #1a2733; }
+      #page-drawer .section.clickable.half-width:nth-child(n+3) .container {
+        border-top: solid 1px #4f657b; }
+      #page-drawer .section.clickable.half-width:nth-child(even) .container {
+        border-left: solid 1px #4f657b; }
+      #page-drawer .section.clickable.half-width:nth-last-child(n+3) .container {
+        border-bottom: solid 2px #21313f; }
+      #page-drawer .section.clickable.half-width:nth-child(odd) .container {
+        border-right: solid 2px #21313f; }
+    #page-drawer .section .container {
+      padding: 25px 30px; }
+      #page-drawer .section .container.skinny {
+        padding: 20px 20px 12px; }
+      #page-drawer .section .container.settings-row {
+        height: 25px;
+        padding: 15px 14px 12px;
+        border-bottom: solid 2px #21313f; }
+        #page-drawer .section .container.settings-row p {
+          margin-top: 3px; }
+  #page-drawer .button {
+    text-align: left; }
+  #page-drawer .element {
+    font-size: 13px;
+    font-weight: bolder; }
+    #page-drawer .element p {
+      margin-bottom: 0;
+      margin-top: 5px; }
+    #page-drawer .element .element-icon {
+      margin: 0 auto; }
+  #page-drawer .checkbox-slider {
+    overflow: hidden;
+    border-radius: 10px;
+    width: 50px;
+    height: 21px;
+    background: url('../weebly_assets/sprites/Toggle-Switch.png');
+    background-position: -6px -7px; }
+    #page-drawer .checkbox-slider.center {
+      margin: 0 auto; }
+    #page-drawer .checkbox-slider input[type=checkbox] {
+      display: none; }
+      #page-drawer .checkbox-slider input[type=checkbox]:checked + label {
+        left: 0; }
+      #page-drawer .checkbox-slider input[type=checkbox]:disabled + label {
+        display: none; }
+    #page-drawer .checkbox-slider label {
+      -webkit-transition: 0.3s ease all;
+      transition: 0.3s ease all;
+      display: block;
+      position: relative;
+      left: -29px;
+      width: 80px;
+      height: 21px;
+      background: url('../weebly_assets/sprites/Toggle-Switch.png'), url('../weebly_assets/sprites/Toggle-Switch.png');
+      background-position: -6px -57px, 23px -32px;
+      background-repeat: no-repeat; }
 
 #page-container {
   background: #ffffff;
@@ -121,3 +251,34 @@ body {
   right: 0;
   bottom: 0;
   padding: 40px; }
+
+.weebly-icon.element {
+  background: url('../weebly_assets/sprites/Element-Icons.png');
+  width: 54px;
+  height: 54px;
+  margin: 0 auto; }
+  .weebly-icon.element.title {
+    background-position: -8px -8px; }
+  .weebly-icon.element.text {
+    background-position: -62px -8px; }
+  .weebly-icon.element.image {
+    background-position: -116px -8px; }
+  .weebly-icon.element.nav {
+    background-position: -170px -8px; }
+.weebly-icon.add, .weebly-icon.edit, .weebly-icon.delete {
+  background: url('../weebly_assets/sprites/Add-Delete-Edit-Icons.png');
+  background-position-y: -32px;
+  width: 14px;
+  height: 14px; }
+  .weebly-icon.add.add, .weebly-icon.edit.add, .weebly-icon.delete.add {
+    background-position-x: -13px; }
+  .weebly-icon.add.edit, .weebly-icon.edit.edit, .weebly-icon.delete.edit {
+    background-position-x: -32px; }
+  .weebly-icon.add.delete, .weebly-icon.edit.delete, .weebly-icon.delete.delete {
+    background-position-x: -51px; }
+  .weebly-icon.add.disabled, .weebly-icon.edit.disabled, .weebly-icon.delete.disabled {
+    background-position-y: -51px; }
+  .weebly-icon.add.blue, .weebly-icon.edit.blue, .weebly-icon.delete.blue {
+    background-position-y: -70px; }
+  .weebly-icon.add.fade, .weebly-icon.edit.fade, .weebly-icon.delete.fade {
+    background-position-y: -13px; }

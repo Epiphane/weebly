@@ -8,10 +8,19 @@
 $white: #ffffff;
 $black: #1a2733;
 $weebly-blue: #518dca;
+$weebly-blue-border: #6399cf;
+
 $weebly-light-blue: #9cb3ca;
+$weebly-lighter-blue: #34485c;
 $weebly-med-blue: #4f657b;
 $weebly-dark-blue: #2c3e50;
+$weebly-darker-blue: #21313f;
 $weebly-superdark-blue: #1a2733;
+
+$weebly-light-gray: #eff2f5;
+$weebly-lighter-gray: #c0ccd8;
+$weebly-med-gray: #97aabc;
+$weebly-dark-gray: #8498ac;
 
 $title-bar-height: 40px;
 $page-drawer-width: 235px;
@@ -34,22 +43,119 @@ body {
   height: 100%;
 }
 
-.fill-width {
+.full-width {
   width: 100%;
+  float: left;
+}
+
+.half-width {
+  width: 50%;
+  float: left;
+}
+
+.pull-right {
+  float: right;
 }
 
 .button {
-  display: block;
-  padding: 10px 15px;
-  margin-bottom: 8px;
-  border-radius: 6px;
+  cursor: pointer;
 
-  &:last-child {
-    margin-bottom: 0;
+  padding: 10px 40px;
+  display: inline-block;
+  text-transform: uppercase;
+  border-radius: 3px;
+
+  font-size: 13px;
+  font-weight: bolder;
+
+  .weebly-icon.pull-right {
+    margin-right: -5px;
+    margin-top: 1px;
+  }
+
+  .fade {
+    opacity: 0.5;
+    transition: opacity ease 0.4s;
+  }
+
+  &:hover {
+    .fade {
+      opacity: 1;
+    } 
   }
 
   &.primary {
     background: $weebly-blue;
+    border: 1px solid $weebly-blue-border;
+    color: $white;
+
+    box-shadow: 0px 2px 1px 0px $black;
+  }
+
+  &.secondary {
+    background: $weebly-med-gray;
+    border: 2px solid $weebly-dark-gray;
+    color: $white;
+  }
+
+  &.tertiary {
+    border: 2px solid $weebly-med-blue;
+  }
+}
+
+input[type='text'] {
+  background: none;
+  color: $white;
+  outline: 0;
+
+  &::-webkit-input-placeholder {
+    color: $weebly-med-blue;
+  }
+
+  &:-moz-placeholder { /* Firefox 18- */
+    color: $weebly-med-blue;
+  }
+
+  &::-moz-placeholder {  /* Firefox 19+ */
+    color: $weebly-med-blue;
+  }
+
+  &:-ms-input-placeholder { 
+    color: $weebly-med-blue;
+  }
+
+  &:focus + .focus-blue {
+    background-position-y: -70px;
+  }
+}
+
+.input-with-icon {
+  position: relative;
+
+  .weebly-icon {
+    position: absolute;
+    top: 11px;
+    right: 10px;
+  }
+
+  .fade {
+    opacity: 0.5;
+    transition: opacity ease 0.4s;
+  }
+
+  &:hover {
+    .fade {
+      opacity: 1;
+    }
+  }
+
+  input:focus + .fade.weebly-icon {
+    opacity: 1;
+  }
+
+  input[type='submit'].weebly-icon {
+    border: 0;
+    text-indent: -999px;
   }
 }
 
@@ -80,19 +186,147 @@ body {
   text-align: center;
   font-weight: lighter;
 
+  .button {
+    display: block;
+    padding: 8px 18px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  input[type='text'].button {
+    padding: 8px 16px 8px 15px;
+  }
+
   .header {
     background: $weebly-med-blue;
     color: $weebly-light-blue;
-    padding: 8px;
+    padding: 8px 0 7px;
 
     font-size: 13px;
-    font-weight: bold;
+    font-weight: bolder;
     border-top: solid 2px $weebly-superdark-blue;
     border-bottom: solid 2px $weebly-superdark-blue;
+
+    float: left;
+    width: 100%;
+
+    // box-shadow: 0px 0px 2px 0px $black;
   }
 
   .section {
-    padding: 20px;
+    float: left;
+
+    &.clickable {
+      background: $weebly-lighter-blue;
+
+      &.half-width {
+        &:nth-child(-n+2) {
+          box-shadow: inset 0 20px 20px -20px $black;
+        }
+
+        &:nth-child(n+3) {
+          .container {
+            border-top: solid 1px $weebly-med-blue;
+          }
+        }
+
+        &:nth-child(even) {
+          .container {
+            border-left: solid 1px $weebly-med-blue;
+          }
+        }
+        &:nth-last-child(n+3) {
+          .container {
+            border-bottom: solid 2px $weebly-darker-blue;
+          }
+        }
+
+        &:nth-child(odd) {
+          .container {
+            border-right: solid 2px $weebly-darker-blue;
+          }
+        }
+      }
+    }
+
+    .container {
+      padding: 25px 30px;
+
+      &.skinny {
+        padding: 20px 20px 12px;
+      }
+
+      &.settings-row {
+        height: 25px;
+        padding: 15px 14px 12px;
+        border-bottom: solid 2px #21313f;
+
+        p {
+          margin-top: 3px;
+        }
+      }
+    }
+  }
+
+  .button {
+    text-align: left;
+  }
+
+  .element {
+    font-size: 13px;
+    font-weight: bolder;
+
+    p {
+      margin-bottom: 0;
+      margin-top: 5px;
+    }
+
+    .element-icon {
+      margin: 0 auto;
+    }
+  }
+
+  .checkbox-slider {
+    &.center {
+      margin: 0 auto;
+    }
+
+    overflow: hidden;
+    border-radius: 10px;
+    width: 50px;
+    height: 21px;
+    background: url('../weebly_assets/sprites/Toggle-Switch.png');
+    background-position: -6px -7px;
+
+    input[type=checkbox] {
+      display: none;
+
+      &:checked + label {
+        left: 0;
+      }
+
+      &:disabled + label {
+        display: none;
+      }
+    }
+
+    label {
+      -webkit-transition: 0.3s ease all;
+      transition: 0.3s ease all;
+      display: block;
+
+      position: relative;
+      left: -29px;
+      width: 80px;
+      height: 21px;
+
+      background: url('../weebly_assets/sprites/Toggle-Switch.png'), url('../weebly_assets/sprites/Toggle-Switch.png');
+      background-position: -6px -57px, 23px -32px;
+      background-repeat: no-repeat;
+    }
   }
 }
 
@@ -105,4 +339,61 @@ body {
   bottom: 0;
 
   padding: 40px;
+}
+
+.weebly-icon {
+  &.element {
+    background: url('../weebly_assets/sprites/Element-Icons.png');
+    width: 54px;
+    height: 54px;
+    margin: 0 auto;
+
+    &.title {
+      background-position: -8px -8px;
+    }
+
+    &.text {
+      background-position: -62px -8px;
+    }
+    
+    &.image {
+      background-position: -116px -8px;
+    }
+    
+    &.nav {
+      background-position: -170px -8px;
+    }
+  }
+
+  &.add, &.edit, &.delete {
+    background: url('../weebly_assets/sprites/Add-Delete-Edit-Icons.png');
+    background-position-y: -32px;
+
+    width: 14px;
+    height: 14px;
+
+    &.add {
+      background-position-x: -13px;
+    }
+
+    &.edit {
+      background-position-x: -32px;
+    }
+
+    &.delete {
+      background-position-x: -51px;
+    }
+
+    &.disabled {
+      background-position-y: -51px;
+    }
+
+    &.blue {
+      background-position-y: -70px;
+    }
+
+    &.fade {
+      background-position-y: -13px;
+    }
+  }
 }
