@@ -1,59 +1,63 @@
 <?php
 include("db.php");
 
-include("weebly_page.php");
+include("rest_object.php");
+include("rest_page.php");
 
+$baseURI = "/api/";
 $request = array_slice(explode("/", $_SERVER[REQUEST_URI]), 2);
 $method = $_SERVER[REQUEST_METHOD];
 
-handleRequest($connect, $request, $method);
+$status = 200;
+handleRequest($request, $method);
 
-function handleRequest($mysqli, $request, $method) {
-  var_dump($request);
-  var_dump($method);
+function handleRequest($request, $method) {
+  global $status;
 
-  die();
-
-  if($method == "POST") {
-    echo $_POST["method"];
+  $object = getObject($request[0], $request[1]);
+  if($object == null) {
+    sendResponse(404);
   }
-
-  //header('HTTP/1.0 404 Not Found');
-  //die();
-  //send404AndDie();
-
-  // Base stuff
-  if(count($request) == 1) {
-    switch($method) {
-      case "GET":
-        listApps(null);
-        break;
-      default:
-        echo "Not recognized, sorry bud";
-    }
-  }
-
-  // Not base list - pass it on.
-  // Better have a hash!
   else {
-    // Is it a hash?
-    if(strlen($request[1]) > 0) {
-      // Found app! Pass on the request
-      $app = new App($mysqli, $request[1], null);
-      $request = array_slice($request, 2);
+    $response = $object->handleRequest($request, $method);
 
-      // Pass on request!
-      $app->request($mysqli, $request, $method);
+    sendResponse($status, $response);
+  }
+}
+
+function getObject($name, $id) {
+  global $restObjects;
+
+  foreach($restObjects as $restObject) {
+    // Plural
+    if($name == $restObject::$plural) {
+      return new $restObject(false);
+    }
+    // Singular
+    else if($name == $restObject::$single && !is_null($id)) {
+      return new $restObject($id);
     }
     else {
-      echo("Error: App Hash not found");
+      return null;
     }
   }
 }
 
-function send404AndDie() {
-  header('HTTP/1.0 404 Not Found');
-  die();
+// Helper method to send a HTTP response code/message
+function sendResponse($status = 200, $body = '', $content_type = 'text/html')
+{
+  $status_header = 'HTTP/1.1 ' . $status . ' ' . getStatusCodeMessage($status);
+  header($status_header);
+  header('Content-type: ' . $content_type);
+  echo $body;
+}
+
+// Helper method to get a string description for an HTTP status code
+// From http://www.gen-x-design.com/archives/create-a-rest-api-with-php/ 
+$codes = parse_ini_file("codes.ini");
+function getStatusCodeMessage($status)
+{
+  return (isset($codes[$status])) ? $codes[$status] : '';
 }
 
 ?>

@@ -1,0 +1,3 @@
+RewriteEngine on
+
+RewriteRule ^api.*$ api/index.php [NC,L]
