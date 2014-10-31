@@ -1,6 +1,7 @@
 <?php
 include("db.php");
 
+include("google_auth.php");
 include("rest_object.php");
 include("rest_page.php");
 
@@ -13,6 +14,22 @@ handleRequest($request, $method);
 
 function handleRequest($request, $method) {
   global $status;
+
+  if(strpos($request[0], "oauth") !== false) {
+    google_loginUser($_GET['code']);
+  }
+
+  $response = google_authUser();
+  if($response !== true) {
+    $response = "{
+      \"error\": {
+        \"message\": \"Please sign in with Google +\",
+        \"url\": \"" . $response . "\"
+      }
+    }";
+    sendResponse(401, $response);
+    return;
+  }
 
   $object = getObject($request[0], $request[1]);
   if($object == null) {
