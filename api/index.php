@@ -1,13 +1,16 @@
 <?php
+error_reporting(E_ALL); ini_set('display_errors', 'On');
 include("db.php");
 
-include("google_auth.php");
+include("auth.php");
 include("rest_object.php");
 include("rest_page.php");
 
+header('Content-Type: application/json');
+
 $baseURI = "/api/";
-$request = array_slice(explode("/", $_SERVER[REQUEST_URI]), 2);
-$method = $_SERVER[REQUEST_METHOD];
+$request = array_slice(explode("/", $_SERVER['REDIRECT_URL']), 2);
+$method = $_SERVER['REQUEST_METHOD'];
 
 $status = 200;
 handleRequest($request, $method);
@@ -18,27 +21,42 @@ function handleRequest($request, $method) {
   if(strpos($request[0], "oauth") !== false) {
     google_loginUser($_GET['code']);
   }
-
-  $response = google_authUser();
-  if($response !== true) {
+  else if(strpos($request[0], "token") !== false) {
+    $url = google_authUser();
     $response = "{
       \"error\": {
-        \"message\": \"Please sign in with Google +\",
-        \"url\": \"" . $response . "\"
+        \"message\": \"Please sign in with Google Plus\",
+        \"url\": \"" . $url . "\"
       }
     }";
     sendResponse(401, $response);
-    return;
   }
-
-  $object = getObject($request[0], $request[1]);
-  if($object == null) {
-    sendResponse(404);
+  else if(strpos($request[0], "logout") !== false) {
+    google_logoutUser();
+    sendResponse(200);
+  }
+  else if(isset($_SESSION['display_object']) && $_SESSION['display_object']) {
+    $obj = $_SESSION['display_object'];
+    unset($_SESSION['display_object']);
+    sendResponse(200, $obj);
   }
   else {
-    $response = $object->handleRequest($request, $method);
+    $response = auth();
+    if($response !== true) {
+      sendResponse(401, $response);
+      return;
+    }
 
-    sendResponse($status, $response);
+    $object = getObject(count($request) > 0 ? $request[0] : null, 
+                        count($request) > 1 ? $request[1] : null);
+    if($object == null) {
+      sendResponse(404);
+    }
+    else {
+      $response = $object->handleRequest($request, $method);
+
+      sendResponse($status, $response);
+    }
   }
 }
 
