@@ -33,6 +33,7 @@ function auth() {
     else {
       return "{
         \"error\": {
+          \"type\": 2,
           \"message\": \"Token is not valid\",
           \"url\": \"http://weebly.thomassteinke.com/api/token\"
         }
@@ -43,6 +44,7 @@ function auth() {
   // No valid token provided - return a login link
   return "{
     \"error\": {
+      \"type\": 1,
       \"message\": \"Please sign in with Google Plus\",
       \"url\": \"" . $client->createAuthUrl() . "\"
     }
@@ -50,7 +52,7 @@ function auth() {
 }
 
 function google_authUser() {
-  global $client, $mysqli;
+  global $client, $mysqli, $status;
 
   if(isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     $client->setAccessToken($_SESSION['access_token']);
@@ -59,7 +61,14 @@ function google_authUser() {
         $client->refreshToken($_SESSION['refresh_token']);
       }
       else {
-        return $client->createAuthUrl();
+        // $status = 401;
+        return "{"
+          . "\"error\": {"
+            . "\"type\": 1,"
+            . "\"message\": \"Please sign in with Google Plus\","
+            . "\"url\": \"" . $client->createAuthUrl() . "\""
+          . "}"
+        . "}";
       }
     }
 
@@ -83,10 +92,19 @@ function google_authUser() {
 
     $token = $result->fetch_object()->token;
 
-    $_SESSION['display_object'] = json_encode(array("token" => $token));
-    $redirect = 'http://' . $_SERVER['HTTP_HOST'] . "/api/";
-    header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
-    var_dump($redirect);
+    return json_encode(array("token" => $token));
+    // $redirect = 'http://' . $_SERVER['HTTP_HOST'] . "/api/";
+    // header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
+  }
+  else {
+    // $status = 401;
+    return "{"
+      . "\"error\": {"
+        . "\"type\": 1,"
+        . "\"message\": \"Please sign in with Google Plus\","
+        . "\"url\": \"" . $client->createAuthUrl() . "\""
+      . "}"
+    . "}";
   }
 }
 
@@ -132,7 +150,7 @@ function google_loginUser($code) {
   }
 
   $_SESSION['display_object'] = json_encode(array("token" => $token));
-  $redirect = 'http://' . $_SERVER['HTTP_HOST'] . "/api/";
+  $redirect = 'http://' . $_SERVER['HTTP_HOST'] . "/api/close";
   header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
 }
 

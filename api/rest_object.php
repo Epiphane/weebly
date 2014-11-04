@@ -97,7 +97,8 @@ class RESTObject {
     $columns = array();
     $values = array();
     for($ndx = 0; $ndx < count($this->createFields); $ndx ++) {
-      if(!is_null($_POST[$this->createFields[$ndx]])) {
+      if(isset($_POST[$this->createFields[$ndx]]) && 
+        !is_null($_POST[$this->createFields[$ndx]])) {
         array_push($columns, $this->createFields[$ndx]);
         array_push($values, "'" . $_POST[$this->createFields[$ndx]] . "'");
       }

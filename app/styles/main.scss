@@ -190,6 +190,7 @@ input[type='text'] {
     display: block;
     padding: 8px 18px;
     margin-bottom: 8px;
+    width: $page-drawer-width - 95px;
 
     &:last-child {
       margin-bottom: 0;
@@ -197,7 +198,7 @@ input[type='text'] {
   }
 
   input[type='text'].button {
-    padding: 8px 16px 8px 15px;
+    padding: 8px 17px;
   }
 
   .header {

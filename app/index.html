@@ -30,12 +30,12 @@
           Templates
         </div>
         <div class="section full-width">
-          <div class="container">
+          <div id="pages" class="container">
             <div class="button primary">
               Page
             </div>
             <form class="input-with-icon" method="POST">
-              <input id="new-page" name="page-name" type="text" class="button tertiary with-icon" placeholder="Add new page" />
+              <input id="new-page" name="title" type="text" class="button tertiary with-icon" placeholder="Add new page" autocomplete="off" />
               <input type="submit" class="pull-right weebly-icon add fade focus-blue" data-control="new-page" />
             </form>
           </div>
@@ -102,7 +102,11 @@
     <!-- endbuild -->
 
     <!-- build:js({app,.tmp}) scripts/main.js -->
+    <script type="text/javascript">
+      var localhost = (window.location.href.indexOf('localhost') >= 0);
+    </script>
     <script src="scripts/main.js"></script>
+    <script src="scripts/auth.js"></script>
     <!-- endbuild -->
 </body>
 </html>

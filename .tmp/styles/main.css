@@ -93,7 +93,8 @@ body {
     margin-top: 1px; }
   .button .fade {
     opacity: 0.5;
-    transition: opacity ease 0.4s; }
+    -webkit-transition: opacity ease 0.4s;
+            transition: opacity ease 0.4s; }
   .button:hover .fade {
     opacity: 1; }
   .button.primary {
@@ -133,7 +134,8 @@ input[type='text'] {
     right: 10px; }
   .input-with-icon .fade {
     opacity: 0.5;
-    transition: opacity ease 0.4s; }
+    -webkit-transition: opacity ease 0.4s;
+            transition: opacity ease 0.4s; }
   .input-with-icon:hover .fade {
     opacity: 1; }
   .input-with-icon input:focus + .fade.weebly-icon {
@@ -165,11 +167,12 @@ input[type='text'] {
   #page-drawer .button {
     display: block;
     padding: 8px 18px;
-    margin-bottom: 8px; }
+    margin-bottom: 8px;
+    width: 140px; }
     #page-drawer .button:last-child {
       margin-bottom: 0; }
   #page-drawer input[type='text'].button {
-    padding: 8px 16px 8px 15px; }
+    padding: 8px 17px; }
   #page-drawer .header {
     background: #4f657b;
     color: #9cb3ca;
@@ -280,5 +283,3 @@ input[type='text'] {
     background-position-y: -70px; }
   .weebly-icon.add.fade, .weebly-icon.edit.fade, .weebly-icon.delete.fade {
     background-position-y: -13px; }
-
-/*# sourceMappingURL=main.css.map */

@@ -6,8 +6,6 @@ include("auth.php");
 include("rest_object.php");
 include("rest_page.php");
 
-header('Content-Type: application/json');
-
 $baseURI = "/api/";
 $request = array_slice(explode("/", $_SERVER['REDIRECT_URL']), 2);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -18,44 +16,66 @@ handleRequest($request, $method);
 function handleRequest($request, $method) {
   global $status;
 
-  if(strpos($request[0], "oauth") !== false) {
+  if(strpos($request[0], "close") !== false) {
+    $body = "<html>
+              <body>
+              <script type='text/javascript'>this.close()</script>
+              </body>
+            </html>";
+    sendResponse(200, $body);
+  }
+  else if(strpos($request[0], "oauth") !== false) {
     google_loginUser($_GET['code']);
   }
   else if(strpos($request[0], "token") !== false) {
-    $url = google_authUser();
-    $response = "{
-      \"error\": {
-        \"message\": \"Please sign in with Google Plus\",
-        \"url\": \"" . $url . "\"
-      }
-    }";
-    sendResponse(401, $response);
-  }
-  else if(strpos($request[0], "logout") !== false) {
-    google_logoutUser();
-    sendResponse(200);
-  }
-  else if(isset($_SESSION['display_object']) && $_SESSION['display_object']) {
-    $obj = $_SESSION['display_object'];
-    unset($_SESSION['display_object']);
-    sendResponse(200, $obj);
+    header('Cache-Control: no-cache');
+    header('Content-Type: text/event-stream');
+
+    // function sendMsg($msg) {
+    //   ob_flush();
+    //   flush();
+    // }
+
+    // $serverTime = time();
+
+    // sendMsg($serverTime, 'server time: ' . date("h:i:s", time()));
+    // die();
+
+    $response = google_authUser();
+    // sendResponse($status, $response, 'text/event-stream');
+    echo "data: " . $response . PHP_EOL;
+    echo PHP_EOL;
+    // ob_flush();
+    flush();
   }
   else {
-    $response = auth();
-    if($response !== true) {
-      sendResponse(401, $response);
-      return;
+    header('Content-Type: application/json');
+    if(strpos($request[0], "logout") !== false) {
+      google_logoutUser();
+      sendResponse(200);
     }
-
-    $object = getObject(count($request) > 0 ? $request[0] : null, 
-                        count($request) > 1 ? $request[1] : null);
-    if($object == null) {
-      sendResponse(404);
-    }
+    // else if(isset($_SESSION['display_object']) && $_SESSION['display_object']) {
+    //   $obj = $_SESSION['display_object'];
+    //   unset($_SESSION['display_object']);
+    //   sendResponse(200, $obj);
+    // }
     else {
-      $response = $object->handleRequest($request, $method);
+      $response = auth();
+      if($response !== true) {
+        sendResponse(401, $response);
+        return;
+      }
 
-      sendResponse($status, $response);
+      $object = getObject(count($request) > 0 ? $request[0] : null, 
+                          count($request) > 1 ? $request[1] : null);
+      if($object == null) {
+        sendResponse(404);
+      }
+      else {
+        $response = $object->handleRequest($request, $method);
+
+        sendResponse($status, $response);
+      }
     }
   }
 }
