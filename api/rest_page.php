@@ -4,7 +4,7 @@ class Pages extends RESTObject {
   public static $single = "page";
   public static $plural = "pages";
 
-  protected $createFields = array("title");
+  protected $createFields = array("name", "config");
   protected $updateFields = array("name", "config");
 
   public function getIndexFields() {

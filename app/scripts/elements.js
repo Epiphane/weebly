@@ -323,7 +323,6 @@ var ImageElement = function(config) {
   // Create main divs
   if(!config.fixed) {
     deleteButton = $('<div class="delete-element image"></div>');    
-    deleteButton.hide();
   }
   display = $('<img />');
   
@@ -338,21 +337,40 @@ var ImageElement = function(config) {
 
       placeholder.append(display).append(tag);
 
-      container.html(placeholder); 
+      container.html([deleteButton, placeholder]); 
     }
     else {
       container.removeClass('empty');
 
       display.attr('src', config.url);
 
-      container.html(display);
+      container.html([deleteButton, display]);
     }
   }
 
   element.container = container;
   element._delete = {
-    trigger: function() {},
-    cancel: function() {}
+    button: deleteButton,
+    trigger: function() {
+      if(config.fixed) {
+        return false;
+      }
+
+      if(deleteButton.hasClass('confirm')) {
+        return true;
+      }
+      container.addClass('delete');
+      deleteButton.addClass('confirm');
+      return false;
+    },
+    cancel: function() {
+      if(config.fixed) {
+        return false;
+      }
+      
+      container.removeClass('delete');
+      deleteButton.removeClass('confirm');
+    }
   };
 
   // Set up textarea
@@ -362,6 +380,7 @@ var ImageElement = function(config) {
   
   // Edit the textarea
   element.edit = function edit() {
+    element.editing = false;
   };
 
   element.finalize = function finalize() {

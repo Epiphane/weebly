@@ -33,7 +33,14 @@
       var formData = newPageForm.serializeArray()[0];
       var data = {};
       data[formData.name] = formData.value;
-      data[formData.config] = "[]";
+      data.config = JSON.stringify([
+        {
+          type: "title",
+          text: "Add Title Here",
+          fixed: true
+        }
+      ]);
+
       Weebly.post({
         url: Weebly.url('pages'),
         data: data
@@ -184,6 +191,7 @@
         page = pageCache[selectedPage];
       }
 
+      currentPage = [];
       page.config.forEach(function(element) {
         currentPage.push(Weebly.element(element));
       });

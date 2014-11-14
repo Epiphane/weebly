@@ -24,6 +24,9 @@
           font-size: 14px;
           text-transform: uppercase;
           color: #c0ccd8; }
+      .page-element .image.empty.delete {
+        border-color: #ef7a74;
+        background: #FDDEDC; }
   .page-element .title {
     font-size: 32px; }
   .page-element .text {
@@ -55,13 +58,16 @@
     top: 20px;
     z-index: 90;
     background-position: -5px -10px; }
-    .page-element .delete-element.confirm {
-      background-position: -48px -10px; }
     .page-element .delete-element.title {
       right: -2px; }
     .page-element .delete-element.text {
       right: 4px;
       top: 0; }
+    .page-element .delete-element.image {
+      background-position-x: -91px;
+      right: 0; }
+    .page-element .delete-element.confirm {
+      background-position: -48px -10px; }
   .page-element .ui-wrapper .ui-resizable-handle {
     background: url('/weebly_assets/sprites/Resize-Bar.png') -6px -5px;
     border-radius: 11px; }
@@ -88,3 +94,5 @@
     background-position-y: -55px; }
   .page-element .ui-wrapper.delete textarea, .page-element .ui-wrapper.delete .textarea {
     border-color: #ef7a74; }
+
+/*# sourceMappingURL=elements.css.map */

@@ -1,8 +1,10 @@
 $weebly-light-gray: #eff2f5;
 $weebly-lighter-gray: #c0ccd8;
 
-$weebly-border-blue: #7fc1ff;
 $weebly-border-red: #ef7a74;
+$weebly-lighter-red: #FDDEDC;
+
+$weebly-border-blue: #7fc1ff;
 $weebly-element-font: #4f657b;
 
 .page-element {
@@ -42,6 +44,11 @@ $weebly-element-font: #4f657b;
           text-transform: uppercase;
           color: $weebly-lighter-gray;
         }
+      }
+
+      &.delete {
+        border-color: $weebly-border-red;
+        background: $weebly-lighter-red;
       }
     }
   }
@@ -92,16 +99,20 @@ $weebly-element-font: #4f657b;
 
     background-position: -5px -10px;
 
-    &.confirm { 
-      background-position: -48px -10px;
-    }
-
     &.title {
       right: -2px;  
     }
     &.text {
       right: 4px;  
       top: 0;
+    }
+    &.image {
+      background-position-x: -91px;
+      right: 0;
+    }
+
+    &.confirm { 
+      background-position: -48px -10px;
     }
   }
 
