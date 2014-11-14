@@ -62,21 +62,39 @@ class RESTObject {
 		sendResponse(500, "getTableName() not implemented");
 	}
 
+  public function getIndexFields() {
+    return "*";
+  }
+
+  public function getShowFields() {
+    return "*";
+  }
+
+  public function serialize($object) {
+    return $object;
+  }
+
   public function index() {
     global $mysqli;
 
-    $objQuery = $mysqli->prepare("SELECT * FROM " . $this->getTableName() . " WHERE 1");
+    $objQuery = $mysqli->prepare("SELECT " . $this->getIndexFields()
+      . " FROM " . $this->getTableName() . " WHERE 1");
 
     $objQuery->execute();
     $objects = $this->fetch_object_array($objQuery->get_result());
 
-    return json_encode($objects);
+    $serialized = array();
+    for($ndx = 0; $ndx < count($objects); $ndx ++) {
+      array_push($serialized, $this->serialize($objects[$ndx]));
+    }
+    return json_encode($serialized);
   }
 
   public function show($id) {
     global $mysqli, $status;
 
-    $objQuery = $mysqli->prepare("SELECT * FROM " . $this->getTableName() . " WHERE id = ?");
+    $objQuery = $mysqli->prepare("SELECT " . $this->getShowFields()
+      . " FROM " . $this->getTableName() . " WHERE id = ?");
 
     $objQuery->bind_param("s", $id);
     $objQuery->execute();
@@ -109,11 +127,29 @@ class RESTObject {
     $objQuery->execute();
 
     $status = 201;
-    return $baseURI . $this::$single . "/" . $mysqli->insert_id;
+    return "{ \"url\": \"" . $baseURI . $this::$single . "/" . $mysqli->insert_id . "\" }";
   }
 
   public function update($id) {
-    return "Unimplemented but good job anyway";
+    global $mysqli, $status, $baseURI, $_PUT;
+
+    $query = "UPDATE " . $this->getTableName() . " SET ";
+
+    $params = array();
+    for($ndx = 0; $ndx < count($this->updateFields); $ndx ++) {
+      if(isset($_PUT[$this->updateFields[$ndx]]) && 
+        !is_null($_PUT[$this->updateFields[$ndx]])) {
+        array_push($params, $this->updateFields[$ndx] . " = '" . $_PUT[$this->updateFields[$ndx]] . "'");
+      }
+    }
+    $query .= join(",",$params);
+
+    $objQuery = $mysqli->prepare($query . "WHERE id = ?");
+
+    $objQuery->bind_param("s", $id);
+    $objQuery->execute();
+    
+    return $this->show($id);
   }
 
   public function delete($id) {
@@ -131,10 +167,6 @@ class RESTObject {
     }
 
     return $objects;
-  }
-
-  public function serialize($object) {
-    return $object;
   }
 }
 

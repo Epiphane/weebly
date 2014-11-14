@@ -13,6 +13,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <!-- endbuild -->
   </head>
   <body>
@@ -31,9 +32,6 @@
         </div>
         <div class="section full-width">
           <div id="pages" class="container">
-            <div class="button primary">
-              Page
-            </div>
             <form class="input-with-icon" method="POST">
               <input id="new-page" name="title" type="text" class="button tertiary with-icon" placeholder="Add new page" autocomplete="off" />
               <input type="submit" class="pull-right weebly-icon add fade focus-blue" data-control="new-page" />
@@ -47,25 +45,25 @@
         <div>
           <div class="section half-width clickable">
             <div class="element container skinny">
-              <div class="weebly-icon element title"></div>
+              <div class="weebly-icon element draggable" element-type="title"></div>
               <p><a>Title</a></p>
             </div>
           </div>
           <div class="section half-width clickable">
             <div class="element container skinny">
-              <div class="weebly-icon element text"></div>
+              <div class="weebly-icon element draggable" element-type="text"></div>
               <p><a>Text</a></p>
             </div>
           </div>
           <div class="section half-width clickable">
             <div class="element container skinny">
-              <div class="weebly-icon element image"></div>
+              <div class="weebly-icon element draggable" element-type="image"></div>
               <p><a>Image</a></p>
             </div>
           </div>
           <div class="section half-width clickable">
             <div class="element container skinny">
-              <div class="weebly-icon element nav"></div>
+              <div class="weebly-icon element draggable" element-type="nav"></div>
               <p><a>Nav</a></p>
             </div>
           </div>
@@ -89,9 +87,10 @@
         </div>
       </div>
 
-      <div id="page-container">
-        <a class="button secondary">Page</a>
-      </div>s
+      <div id="main-container">
+        <div id="page-tabs"></div>
+        <div id="page-container"></div>
+      </div>
 
     </div>
 
@@ -102,10 +101,9 @@
     <!-- endbuild -->
 
     <!-- build:js({app,.tmp}) scripts/main.js -->
-    <script type="text/javascript">
-      var localhost = (window.location.href.indexOf('localhost') >= 0);
-    </script>
     <script src="scripts/main.js"></script>
+    <script src="scripts/elements.js"></script>
+    <script src="scripts/pages.js"></script>
     <script src="scripts/auth.js"></script>
     <!-- endbuild -->
 </body>

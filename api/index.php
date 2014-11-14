@@ -14,7 +14,11 @@ $status = 200;
 handleRequest($request, $method);
 
 function handleRequest($request, $method) {
-  global $status;
+  global $status, $_PUT;
+
+  if($method == "PUT") {
+    parse_str(file_get_contents('php://input'), $_PUT);
+  }
 
   if(strpos($request[0], "close") !== false) {
     $body = "<html>

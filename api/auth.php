@@ -125,10 +125,11 @@ function google_loginUser($code) {
   curl_setopt($curl, CURLOPT_URL, "https://www.googleapis.com/plus/v1/people/me?access_token=" . json_decode($_SESSION['access_token'])->access_token);
   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 0);
-  $userInfo = json_decode(curl_exec($curl));
+  $userInfo = curl_exec($curl);
+  $decoded = json_decode($userInfo);
   curl_close($curl);
 
-  $email = $userInfo->emails[0]->value;
+  $email = $decoded->emails[0]->value;
   $query = $mysqli->prepare("SELECT * FROM users WHERE email = ?");
 
   $query->bind_param("s", $email);
@@ -140,9 +141,7 @@ function google_loginUser($code) {
     $token = uniqid();
 
     $insert = $mysqli->prepare("INSERT INTO users (email, info, token) VALUES (?, ?, ?)");
-    $insert->bind_param("sss", $email, 
-      json_encode($userInfo), 
-      $token);
+    $insert->bind_param("sss", $email, $userInfo, $token);
     $insert->execute();
   }
   else {
