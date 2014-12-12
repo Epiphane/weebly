@@ -1,16 +1,30 @@
-.page-element {
+.page-row {
   padding-top: 20px;
   padding-bottom: 20px;
   width: 100%;
-  float: left; }
-  .page-element.dynamic {
-    position: relative; }
-    .page-element.dynamic.border-top {
-      border-top: 2px dashed #7fc1ff;
-      padding-top: 18px; }
-  .page-element.border-bottom {
+  float: left;
+  display: table;
+  table-layout: fixed; }
+  .page-row.border-top {
+    border-top: 2px dashed #7fc1ff;
+    padding-top: 18px; }
+  .page-row.border-bottom {
     border-bottom: 2px dashed #7fc1ff;
     padding-bottom: 18px; }
+
+.page-element {
+  width: 2%;
+  display: table-cell;
+  padding: 0 5px; }
+  .page-element.border-right {
+    border-right: 2px dashed #7fc1ff;
+    padding-right: 3px; }
+  .page-element.dragging {
+    background: #fff;
+    padding: 5px;
+    width: auto; }
+    .page-element.dragging .image.empty {
+      min-width: 300px; }
   .page-element .image {
     text-align: center; }
     .page-element .image.empty {
@@ -28,6 +42,7 @@
         border-color: #ef7a74;
         background: #FDDEDC; }
   .page-element .title {
+    position: relative;
     font-size: 32px; }
   .page-element .text {
     font-size: 14px;
@@ -59,9 +74,10 @@
     z-index: 90;
     background-position: -5px -10px; }
     .page-element .delete-element.title {
-      right: -2px; }
+      right: -2px;
+      top: 0; }
     .page-element .delete-element.text {
-      right: 4px;
+      right: 0;
       top: 0; }
     .page-element .delete-element.image {
       background-position-x: -91px;
@@ -94,5 +110,3 @@
     background-position-y: -55px; }
   .page-element .ui-wrapper.delete textarea, .page-element .ui-wrapper.delete .textarea {
     border-color: #ef7a74; }
-
-/*# sourceMappingURL=elements.css.map */

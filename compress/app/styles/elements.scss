@@ -1,0 +1,161 @@
+$weebly-light-gray: #eff2f5;
+$weebly-lighter-gray: #c0ccd8;
+
+$weebly-border-red: #ef7a74;
+$weebly-lighter-red: #FDDEDC;
+
+$weebly-border-blue: #7fc1ff;
+$weebly-element-font: #4f657b;
+
+.page-element {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 100%;
+  float: left;
+
+  &.dynamic {
+    position: relative;
+
+    &.border-top {
+      border-top: 2px dashed $weebly-border-blue;
+      padding-top: 18px;
+    }
+  }
+
+  &.border-bottom {
+    border-bottom: 2px dashed $weebly-border-blue;
+    padding-bottom: 18px;
+  }
+
+  .image {
+    text-align: center;
+
+    &.empty {
+      min-height: 280px;
+      background: $weebly-light-gray;
+      border: 2px solid $weebly-lighter-gray;
+      border-radius: 4px;
+
+      .placeholder {
+        margin-top: 74px;
+      
+        .muted {
+          font-size: 14px;
+          text-transform: uppercase;
+          color: $weebly-lighter-gray;
+        }
+      }
+
+      &.delete {
+        border-color: $weebly-border-red;
+        background: $weebly-lighter-red;
+      }
+    }
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .text {
+    font-size: 14px;
+    font-weight: lighter;
+    line-height: 1.5;
+  }
+
+  textarea, .textarea {
+    width: 100%;
+    outline: none;
+    border-radius: 4px;
+    margin-left: -4px;
+    border: 2px solid $weebly-border-blue;
+    padding: 20px;
+    font-family: "ProximaNova", Helvetica, Arial, sans-serif;
+
+    // transition: border-color 0.1s ease;
+  }
+
+  input[type='text'], .input-text {
+    color: $weebly-element-font;
+    width: 100%;
+    outline: none;
+    margin-left: -4px;
+    border: 2px solid $weebly-border-blue;
+    border-radius: 4px;
+
+    // transition: border-color 0.1s ease;
+    &.delete {
+      border-color: $weebly-border-red;
+    }
+  }
+
+  .delete-element {
+    background: url('../weebly_assets/sprites/Delete-Element.png');
+    width: 42px;
+    height: 42px;
+    position: absolute;
+    top: 20px;
+    z-index: 90;
+
+    background-position: -5px -10px;
+
+    &.title {
+      right: -2px;  
+    }
+    &.text {
+      right: 4px;  
+      top: 0;
+    }
+    &.image {
+      background-position-x: -91px;
+      right: 0;
+    }
+
+    &.confirm { 
+      background-position: -48px -10px;
+    }
+  }
+
+  .ui-wrapper {
+    .ui-resizable-handle {
+      background: url('/weebly_assets/sprites/Resize-Bar.png') -6px -5px;
+      border-radius: 11px;
+
+      &.ui-resizable-e {
+        top: 50%;
+        right: 3px;
+        margin-top: -20px;
+        height: 40px;
+        width: 4px;
+      }
+
+      &.ui-resizable-w {
+        top: 50%;
+        left: 3px;
+        margin-top: -20px;
+        height: 40px;
+        width: 4px;
+      }
+
+      &.ui-resizable-s {
+        background-position: -21px -6px;
+
+        bottom: 3px;
+        left: 50%;
+        margin-left: -20px;
+        height: 4px;
+        width: 40px;
+      }
+    }
+
+    &.delete {
+      .ui-resizable-handle {
+        background-position-y: -55px;
+      }
+
+      textarea, .textarea { 
+        border-color: $weebly-border-red;
+      }
+    }
+  }
+}

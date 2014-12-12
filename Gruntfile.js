@@ -21,6 +21,11 @@ module.exports = function (grunt) {
     app: 'app',
     dist: 'dist'
   };
+  
+  var modRewrite = require('connect-modrewrite');
+  var mountFolder = function (connect, dir) {
+    return connect.static(require('path').resolve(dir));
+  };
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -82,8 +87,12 @@ module.exports = function (grunt) {
           middleware: function(connect) {
             return [
               connect.static('.tmp'),
-              connect().use('/bower_components', connect.static('./bower_components')),
-              connect.static(config.app)
+              connect().use(
+                '/bower_components',
+                connect.static('./bower_components')
+              ),
+              modRewrite (['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg$ /index.html [L]']),
+              mountFolder(connect, 'app/')
             ];
           }
         }
@@ -368,7 +377,6 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'wiredep',
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',

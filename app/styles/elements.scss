@@ -7,24 +7,43 @@ $weebly-lighter-red: #FDDEDC;
 $weebly-border-blue: #7fc1ff;
 $weebly-element-font: #4f657b;
 
-.page-element {
+.page-row {
   padding-top: 20px;
   padding-bottom: 20px;
   width: 100%;
   float: left;
+  display: table;
+  table-layout: fixed;
 
-  &.dynamic {
-    position: relative;
-
-    &.border-top {
-      border-top: 2px dashed $weebly-border-blue;
-      padding-top: 18px;
-    }
+  &.border-top {
+    border-top: 2px dashed $weebly-border-blue;
+    padding-top: 18px;
   }
 
   &.border-bottom {
     border-bottom: 2px dashed $weebly-border-blue;
     padding-bottom: 18px;
+  }
+}
+
+.page-element {
+  width: 2%;
+  display: table-cell;
+  padding: 0 5px;
+
+  &.border-right {
+    border-right: 2px dashed $weebly-border-blue;
+    padding-right: 3px;
+  }
+
+  &.dragging {
+    background: #fff;
+    padding: 5px;
+    width: auto;
+
+    .image.empty {
+      min-width: 300px;
+    }
   }
 
   .image {
@@ -54,6 +73,7 @@ $weebly-element-font: #4f657b;
   }
 
   .title {
+    position: relative;
     font-size: 32px;
   }
 
@@ -100,10 +120,11 @@ $weebly-element-font: #4f657b;
     background-position: -5px -10px;
 
     &.title {
-      right: -2px;  
+      right: -2px;
+      top: 0;
     }
     &.text {
-      right: 4px;  
+      right: 0;  
       top: 0;
     }
     &.image {

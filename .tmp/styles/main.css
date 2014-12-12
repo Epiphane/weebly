@@ -54,19 +54,33 @@
   src: url('../weebly_assets/font/VAGRoundedStd-Thin.otf') format('opentype');
   /* Modern Browsers */ }
 
-.page-element {
+.page-row {
   padding-top: 20px;
   padding-bottom: 20px;
   width: 100%;
-  float: left; }
-  .page-element.dynamic {
-    position: relative; }
-    .page-element.dynamic.border-top {
-      border-top: 2px dashed #7fc1ff;
-      padding-top: 18px; }
-  .page-element.border-bottom {
+  float: left;
+  display: table;
+  table-layout: fixed; }
+  .page-row.border-top {
+    border-top: 2px dashed #7fc1ff;
+    padding-top: 18px; }
+  .page-row.border-bottom {
     border-bottom: 2px dashed #7fc1ff;
     padding-bottom: 18px; }
+
+.page-element {
+  width: 2%;
+  display: table-cell;
+  padding: 0 5px; }
+  .page-element.border-right {
+    border-right: 2px dashed #7fc1ff;
+    padding-right: 3px; }
+  .page-element.dragging {
+    background: #fff;
+    padding: 5px;
+    width: auto; }
+    .page-element.dragging .image.empty {
+      min-width: 300px; }
   .page-element .image {
     text-align: center; }
     .page-element .image.empty {
@@ -84,6 +98,7 @@
         border-color: #ef7a74;
         background: #FDDEDC; }
   .page-element .title {
+    position: relative;
     font-size: 32px; }
   .page-element .text {
     font-size: 14px;
@@ -115,9 +130,10 @@
     z-index: 90;
     background-position: -5px -10px; }
     .page-element .delete-element.title {
-      right: -2px; }
+      right: -2px;
+      top: 0; }
     .page-element .delete-element.text {
-      right: 4px;
+      right: 0;
       top: 0; }
     .page-element .delete-element.image {
       background-position-x: -91px;
@@ -161,7 +177,13 @@ body {
   position: absolute;
   width: 100%;
   top: 0;
-  bottom: 0; }
+  bottom: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 
 .dragging {
   position: absolute;
@@ -198,7 +220,8 @@ body {
     margin-top: 1px; }
   .button .fade {
     opacity: 0.5;
-    transition: opacity ease 0.4s; }
+    -webkit-transition: opacity ease 0.4s;
+            transition: opacity ease 0.4s; }
   .button .hover-show {
     display: none; }
   .button:hover .fade {
@@ -242,7 +265,8 @@ input[type='text'] {
     right: 10px; }
   .input-with-icon .fade {
     opacity: 0.5;
-    transition: opacity ease 0.4s; }
+    -webkit-transition: opacity ease 0.4s;
+            transition: opacity ease 0.4s; }
   .input-with-icon:hover .fade {
     opacity: 1; }
   .input-with-icon input:focus + .fade.weebly-icon {
@@ -433,11 +457,9 @@ input[type='text'] {
 .fade-in {
   -webkit-animation: fadein 0.5s;
   /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 0.5s;
   /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
   /* Internet Explorer */
-  -o-animation: fadein 0.5s;
   /* Opera < 12.1 */
   animation: fadein 0.5s; }
 
@@ -449,12 +471,6 @@ input[type='text'] {
     opacity: 1; } }
 
 /* Firefox < 16 */
-@-moz-keyframes fadein {
-  from {
-    opacity: 0; }
-
-  to {
-    opacity: 1; } }
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
@@ -473,11 +489,3 @@ input[type='text'] {
     opacity: 1; } }
 
 /* Opera < 12.1 */
-@-o-keyframes fadein {
-  from {
-    opacity: 0; }
-
-  to {
-    opacity: 1; } }
-
-/*# sourceMappingURL=main.css.map */

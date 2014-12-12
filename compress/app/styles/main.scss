@@ -1,0 +1,527 @@
+// bower:scss
+// endbower
+
+@import "fonts";
+@import "elements";
+@import "variables";
+
+/* Variables */
+$white: #ffffff;
+$black: #1a2733;
+$weebly-blue: #518dca;
+$weebly-blue-border: #6399cf;
+$weebly-red: #d86a65;
+$weebly-red-border: #161f26;
+
+$weebly-light-blue: #9cb3ca;
+$weebly-lighter-blue-hover: #3b5064;
+$weebly-lighter-blue: #34485c;
+$weebly-almost-dark-blue: #5D7288;
+$weebly-med-blue: #4f657b;
+$weebly-dark-blue: #2c3e50;
+$weebly-darker-blue: #21313f;
+$weebly-superdark-blue: #1a2733;
+
+$weebly-light-gray: #eff2f5;
+$weebly-lighter-gray: #c0ccd8;
+$weebly-med-gray: #97aabc;
+$weebly-dark-gray: #8498ac;
+
+$title-bar-height: 40px;
+$page-drawer-width: 235px;
+$page-drawer-pages-height: 250px;
+
+body {
+  background: $white;
+  font-family: "ProximaNova", Helvetica, Arial, sans-serif;
+  color: $weebly-med-blue;
+
+  margin: 0;
+  padding-top: $title-bar-height;
+
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+
+.dragging {
+  position: absolute;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+  float: left;
+}
+
+.half-width {
+  width: 50%;
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.transition-height {
+  -webkit-transition: 0.6s ease height;
+  transition: 0.6s ease height;
+}
+
+.button {
+  cursor: pointer;
+
+  padding: 10px 40px;
+  display: inline-block;
+  text-transform: uppercase;
+  border-radius: 3px;
+
+  font-size: 13px;
+  font-weight: bolder;
+
+  .weebly-icon.pull-right {
+    margin-right: -5px;
+    margin-top: 1px;
+  }
+
+  .fade {
+    opacity: 0.5;
+    transition: opacity ease 0.4s;
+  }
+  
+  .hover-show {
+    display: none;
+  }
+
+  &:hover {
+    .fade {
+      opacity: 1;
+    } 
+
+    .hover-show {
+      display: block;
+    }
+  }
+
+  &.primary {
+    background: $weebly-blue;
+    border: 1px solid $weebly-blue-border;
+    color: $white;
+
+    box-shadow: 0px 2px 1px 0px $black;
+  }
+
+  &.secondary {
+    background: $weebly-med-gray;
+    border: 2px solid $weebly-dark-gray;
+    color: $white;
+  }
+
+  &.tertiary {
+    border: 2px solid $weebly-med-blue;
+  }
+}
+
+input[type='text'] {
+  background: none;
+  color: $white;
+  outline: 0;
+
+  &::-webkit-input-placeholder {
+    color: $weebly-med-blue;
+  }
+
+  &:-moz-placeholder { /* Firefox 18- */
+    color: $weebly-med-blue;
+  }
+
+  &::-moz-placeholder {  /* Firefox 19+ */
+    color: $weebly-med-blue;
+  }
+
+  &:-ms-input-placeholder { 
+    color: $weebly-med-blue;
+  }
+
+  &:focus + .focus-blue {
+    background-position-y: -70px;
+  }
+}
+
+.input-with-icon {
+  position: relative;
+
+  .weebly-icon {
+    position: absolute;
+    top: 11px;
+    right: 10px;
+  }
+
+  .fade {
+    opacity: 0.5;
+    transition: opacity ease 0.4s;
+  }
+
+  &:hover {
+    .fade {
+      opacity: 1;
+    }
+  }
+
+  input:focus + .fade.weebly-icon {
+    opacity: 1;
+  }
+
+  input[type='submit'].weebly-icon {
+    border: 0;
+    text-indent: -999px;
+  }
+}
+
+#title-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  z-index: 1;
+
+  padding-left: 25px;
+  padding-right: 25px;
+
+  width: 100%;
+  height: $title-bar-height;
+  background: $weebly-blue;
+  box-shadow: 0px 0px 1px 1px $black;
+}
+
+#page-drawer {
+  float: left;
+  width: $page-drawer-width;
+  height: 100%;
+
+  background: $weebly-dark-blue;
+
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: lighter;
+
+  #pages {
+    max-height: $page-drawer-pages-height;
+    overflow-y: auto;
+  }
+
+  .button {
+    display: block;
+    padding: 8px 13px 8px 18px;
+    margin-bottom: 8px;
+    width: $page-drawer-width - 90px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .weebly-icon {
+      margin-top: 1px;
+      margin-left: 2px;
+    }
+
+    &.delete {
+      .weebly-icon {
+        display: none;
+
+        &.delete {
+          display: inline-block;
+        }
+      }
+    }
+
+    &.primary {
+      background: $weebly-med-blue;
+      border-color: $weebly-almost-dark-blue;
+
+      &.selected {
+        background: $weebly-blue;
+        border: 1px solid $weebly-blue-border;
+        color: $white;
+
+        box-shadow: 0px 1px 1px 0px #1a2733;
+      }
+
+      &.delete {
+        background: $weebly-red;
+        border: 1px solid $weebly-red-border;
+      }
+    }
+  }
+
+  input[type='text'].button {
+    padding: 7px 12px 7px 17px;
+  }
+
+  .header {
+    background: $weebly-med-blue;
+    color: $weebly-light-blue;
+    padding: 8px 0 7px;
+
+    font-size: 13px;
+    font-weight: bolder;
+    border-top: solid 2px $weebly-superdark-blue;
+    border-bottom: solid 2px $weebly-superdark-blue;
+
+    float: left;
+    width: 100%;
+
+    // box-shadow: 0px 0px 2px 0px $black;
+  }
+
+  .section {
+    float: left;
+
+    &.clickable {
+      background: $weebly-lighter-blue;
+      cursor: move;
+
+      &:hover {
+        background: $weebly-lighter-blue-hover;
+      }
+
+      &.half-width {
+        &:nth-child(-n+2) {
+          box-shadow: inset 0 20px 20px -20px $black;
+        }
+
+        &:nth-child(n+3) {
+          .container {
+            border-top: solid 1px $weebly-med-blue;
+          }
+        }
+
+        &:nth-child(even) {
+          .container {
+            border-left: solid 1px $weebly-med-blue;
+          }
+        }
+        &:nth-last-child(n+3) {
+          .container {
+            border-bottom: solid 2px $weebly-darker-blue;
+          }
+        }
+
+        &:nth-child(odd) {
+          .container {
+            border-right: solid 2px $weebly-darker-blue;
+          }
+        }
+      }
+    }
+
+    .container {
+      padding: 25px 30px;
+
+      &.skinny {
+        padding: 20px 20px 12px;
+      }
+
+      &.settings-row {
+        height: 25px;
+        padding: 15px 14px 12px;
+        border-bottom: solid 2px #21313f;
+
+        p {
+          margin-top: 3px;
+        }
+      }
+    }
+  }
+
+  .button {
+    text-align: left;
+  }
+
+  .element {
+    font-size: 13px;
+    font-weight: bolder;
+
+    p {
+      margin-bottom: 0;
+      margin-top: 5px;
+    }
+
+    .element-icon {
+      margin: 0 auto;
+    }
+  }
+
+  .checkbox-slider {
+    &.center {
+      margin: 0 auto;
+    }
+
+    overflow: hidden;
+    border-radius: 10px;
+    width: 50px;
+    height: 21px;
+    background: url('../weebly_assets/sprites/Toggle-Switch.png');
+    background-position: -6px -7px;
+
+    input[type=checkbox] {
+      display: none;
+
+      &:checked + label {
+        left: 0;
+      }
+
+      &:disabled + label {
+        display: none;
+      }
+    }
+
+    label {
+      -webkit-transition: 0.3s ease all;
+      transition: 0.3s ease all;
+      display: block;
+
+      position: relative;
+      left: -29px;
+      width: 80px;
+      height: 21px;
+
+      background: url('../weebly_assets/sprites/Toggle-Switch.png'), url('../weebly_assets/sprites/Toggle-Switch.png');
+      background-position: -6px -57px, 23px -32px;
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+#main-container {
+  background: $white;
+  position: absolute;
+  top: $title-bar-height;
+  left: $page-drawer-width;
+  overflow-y: auto;
+  right: 0;
+  bottom: 0;
+
+  padding: 40px;
+
+  #page-tabs {
+    margin-bottom: 30px;
+
+    .button {
+      margin-left: 5px;
+      background: none;
+      border: 2px solid $weebly-med-gray;
+      color: $weebly-med-gray;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &.selected {
+        background: $weebly-med-gray;
+        border: 2px solid $weebly-dark-gray;
+        color: $white;
+      }
+    }
+  }
+}
+
+.weebly-icon {
+  &.element {
+    background: url('../weebly_assets/sprites/Element-Icons.png');
+    width: 52px;
+    height: 54px;
+    margin: 0 auto;
+
+    &[element-type="title"] {
+      background-position: -9px -8px;
+    }
+
+    &[element-type="text"] {
+      background-position: -63px -8px;
+    }
+    
+    &[element-type="image"] {
+      background-position: -117px -8px;
+    }
+    
+    &[element-type="nav"] {
+      background-position: -171px -8px;
+    }
+  }
+
+  &.add, &.edit, &.delete {
+    background: url('../weebly_assets/sprites/Add-Delete-Edit-Icons.png');
+    background-position-y: -32px;
+
+    width: 15px;
+    height: 14px;
+    display: inline-block;
+
+    &.add {
+      background-position-x: -13px;
+    }
+
+    &.edit {
+      background-position-x: -32px;
+    }
+
+    &.delete {
+      background-position-x: -51px;
+    }
+
+    &.disabled {
+      background-position-y: -51px;
+    }
+
+    &.blue {
+      background-position-y: -70px;
+    }
+
+    &.fade {
+      background-position-y: -13px;
+    }
+  }
+}
+
+.fade-in {    
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+     -moz-animation: fadein 0.5s; /* Firefox < 16 */
+      -ms-animation: fadein 0.5s; /* Internet Explorer */
+       -o-animation: fadein 0.5s; /* Opera < 12.1 */
+          animation: fadein 0.5s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
