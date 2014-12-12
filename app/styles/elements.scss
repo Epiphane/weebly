@@ -30,6 +30,8 @@ $weebly-element-font: #4f657b;
   width: 2%;
   display: table-cell;
   padding: 0 5px;
+  vertical-align: top;
+  word-wrap: break-word;
 
   &.border-right {
     border-right: 2px dashed $weebly-border-blue;
@@ -48,6 +50,7 @@ $weebly-element-font: #4f657b;
 
   .image {
     text-align: center;
+    position: relative;
 
     &.empty {
       min-height: 280px;
@@ -56,7 +59,11 @@ $weebly-element-font: #4f657b;
       border-radius: 4px;
 
       .placeholder {
-        margin-top: 74px;
+        position: absolute;
+        margin-left: -52px;
+        left: 50%;
+        top: 50%;
+        margin-top: -65px;
       
         .muted {
           font-size: 14px;
@@ -129,7 +136,10 @@ $weebly-element-font: #4f657b;
     }
     &.image {
       background-position-x: -91px;
-      right: 0;
+      position: relative;
+      right: -100%;
+      margin-left: -40px;
+      top: -2px;
     }
 
     &.confirm { 

@@ -18,6 +18,7 @@
       };
 
       var beginDrag = function() {
+        Weebly.finalizeAll();
         draggable.css('opacity', '0');
         selectedElement = draggable.clone();
         selectedElement.addClass('dragging')

@@ -71,7 +71,9 @@
 .page-element {
   width: 2%;
   display: table-cell;
-  padding: 0 5px; }
+  padding: 0 5px;
+  vertical-align: top;
+  word-wrap: break-word; }
   .page-element.border-right {
     border-right: 2px dashed #7fc1ff;
     padding-right: 3px; }
@@ -82,14 +84,19 @@
     .page-element.dragging .image.empty {
       min-width: 300px; }
   .page-element .image {
-    text-align: center; }
+    text-align: center;
+    position: relative; }
     .page-element .image.empty {
       min-height: 280px;
       background: #eff2f5;
       border: 2px solid #c0ccd8;
       border-radius: 4px; }
       .page-element .image.empty .placeholder {
-        margin-top: 74px; }
+        position: absolute;
+        margin-left: -52px;
+        left: 50%;
+        top: 50%;
+        margin-top: -65px; }
         .page-element .image.empty .placeholder .muted {
           font-size: 14px;
           text-transform: uppercase;
@@ -137,7 +144,10 @@
       top: 0; }
     .page-element .delete-element.image {
       background-position-x: -91px;
-      right: 0; }
+      position: relative;
+      right: -100%;
+      margin-left: -40px;
+      top: -2px; }
     .page-element .delete-element.confirm {
       background-position: -48px -10px; }
   .page-element .ui-wrapper .ui-resizable-handle {

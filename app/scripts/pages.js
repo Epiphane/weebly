@@ -41,13 +41,7 @@
       var formData = newPageForm.serializeArray()[0];
       var data = {};
       data[formData.name] = formData.value;
-      data.config = JSON.stringify([
-        {
-          type: "title",
-          text: "Add Title Here",
-          fixed: true
-        }
-      ]);
+      data.config = "[[{\"type\":\"image\",\"fixed\":\"true\"}],[{\"type\":\"title\",\"text\":\"Add title here\",\"fixed\":\"true\"}]]";
 
       Weebly.post({
         url: Weebly.url('pages'),
@@ -75,7 +69,9 @@
       currentPage.forEach(function(row) {
         var rowConfig = [];
         row.forEach(function(element) {
-          rowConfig.push(element.val());
+          var val = element.val();
+          if(val)
+            rowConfig.push(val);
         });
         page.push(rowConfig);
       });
@@ -83,7 +79,7 @@
       Weebly.put({
         url: Weebly.url('page', selectedPage),
         data: {
-          config: JSON.stringify(page)
+          config: page
         }
       });
     };
@@ -218,7 +214,8 @@
         rowConfig.forEach(function(element) {
           row.push(Weebly.element(element));
         });
-        currentPage.push(row);
+        if(row.length > 0)
+          currentPage.push(row);
       });
 
       // Create DOM
@@ -245,10 +242,19 @@
         element._delete.button.click(function() {
           if(element._delete.trigger()) {
             // if it returns true: actually delete element
-            currentPage.splice(currentPage.indexOf(element), 1);
-            element.container.fadeOut(function() {
-              element.container.remove();
-            });
+            var rowIndex = element.container.parent().index();
+            if(element.container.parent().children().length === 1) {
+              currentPage.splice(rowIndex, 1);
+              element.container.parent().fadeOut(function() {
+                element.container.parent().remove();
+              });
+            }
+            else {
+              currentPage[rowIndex].splice(element.container.index(), 1);
+              element.container.fadeOut(function() {
+                element.container.remove();
+              });
+            }
 
             savePage();
           }
@@ -267,20 +273,26 @@
       });
     };
 
-    var editElement = function (element) {
+    Weebly.finalizeAll = function() {
       var needsSave = false;
-      currentPage.forEach(function(other) {
-        if(other.editing) {
-          other.editing = false;
-          other.finalize();
-          other.container.attr('no-drag', 'false');
-          needsSave = true;
-        }
+      currentPage.forEach(function(row) {
+        row.forEach(function(other) {
+          if(other.editing) {
+            other.editing = false;
+            other.finalize();
+            other.container.attr('no-drag', 'false');
+            needsSave = true;
+          }
+        });
       });
 
       if(needsSave) {
         savePage(); 
       }
+    };
+
+    var editElement = function (element) {
+      Weebly.finalizeAll();
 
       element.container.attr('no-drag', 'true');
       element.editing = true;
@@ -362,7 +374,7 @@
             currentPage.splice(row.ndx, 0, [newElement]);
           }
           else { // Nothing picked, we're below the page
-            pageContainer.append(rowContainer);
+            pageContainer.append(container);
             currentPage.push([newElement]);
           }
         }
@@ -373,6 +385,7 @@
 
         initElement(newElement);
         editElement(newElement);
+        savePage();
       }
     };
 
@@ -385,8 +398,9 @@
       else {
         var parentRow = this.container.parent();
         if(row.newRow) {
-          if(row.appendBefore && row.appendBefore.index() === parentRow.index()
-            || row.appendAfter && row.appendAfter.index() === parentRow.index())
+          if(parentRow.children().length === 1 &&
+            (row.appendBefore && row.appendBefore.index() === parentRow.index()
+            || row.appendAfter && row.appendAfter.index() === parentRow.index()))
             return;
         }
         else {

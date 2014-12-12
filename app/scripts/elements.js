@@ -53,13 +53,13 @@ var TextElement = function(config) {
     type += ' text';
   }
   if(!config.text) {
-    config.text = '';
+    config.text = ' ';
   }
 
   container = $('<div class="' + type + '"></div>');
 
   // Create main divs
-  if(!config.fixed) {
+  if(!config.fixed || config.fixed === 'false') {
     deleteButton = $('<div class="delete-element text"></div>');    
   }
   display = $('<div class="' + type + '"></div>');
@@ -73,6 +73,8 @@ var TextElement = function(config) {
   display.html(config.text.replace(/\n/g, '<br>'));
   textarea.html(config.text);
   sizer.html(config.text.replace(/\n/g, '<br>') + '<br>');
+  // sizer.css({display: 'block'
+  // });
 
   // Put 'em in, hoo hah
   container.append([display, textarea, sizer]);
@@ -132,7 +134,8 @@ var TextElement = function(config) {
     });
   
     textarea.parent().hide();
-    deleteButton.appendTo(textarea.parent());
+    if(deleteButton)
+      deleteButton.appendTo(textarea.parent());
   };
   
   // Edit the textarea
@@ -150,7 +153,7 @@ var TextElement = function(config) {
   };
 
   element.finalize = function finalize() {
-    display.html(textarea.val().replace(/\n/g, '<br>')).show();
+    display.html(textarea.val().replace(/\n/g, '<br>') + '<br>').show();
     if(element.customHeight)
       display.height(element.customHeight);
     else
@@ -160,6 +163,9 @@ var TextElement = function(config) {
   };
 
   element.val = function val() {
+    if($.trim(textarea.val()) === '')
+      return false;
+
     var val = {
       type: config.type,
       text: textarea.val(),
@@ -174,11 +180,13 @@ var TextElement = function(config) {
   var resizeTextarea = function resizeTextarea() {
     sizer.width(textarea.width());
 
+    sizer.width();
     var textHeight = sizer.height();
     if(textHeight < textMinHeight)
       textHeight = textMinHeight;
     if(textHeight < element.customHeight)
       textHeight = element.customHeight;
+
 
     textarea.height(textHeight);
     textarea.parent().height(textHeight + 44);
@@ -190,6 +198,9 @@ var TextElement = function(config) {
   }
 
   textarea.keyup(function(event) {
+    if(textarea.val().length === 0)
+      textarea.val(' ');
+
     sizer.html(textarea.val().replace(/\n/g, '<br>') + '<br>');
     element.custom = true;
     resizeTextarea();
@@ -311,6 +322,7 @@ var ImageElement = function(config) {
   container = $('<div class="' + type + '"></div>');
 
   // Create main divs
+  if(config.fixed === 'false') config.fixed = false;
   if(!config.fixed) {
     deleteButton = $('<div class="delete-element image"></div>');    
   }
@@ -371,6 +383,7 @@ var ImageElement = function(config) {
   // Edit the textarea
   element.edit = function edit() {
     element.editing = false;
+    element.container.attr('no-drag', 'false');
   };
 
   element.finalize = function finalize() {
