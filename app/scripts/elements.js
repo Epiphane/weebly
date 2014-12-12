@@ -351,6 +351,29 @@ var ImageElement = function(config) {
   }
 
   element.container = container;
+  element.container.dblclick(function() {
+    var urlform = $('<div class="image-urlform">New URL: </div>');
+    var input = $('<input type="text" />');
+    input.val(config.url);
+
+    urlform.append(input);
+    urlform.dialog({
+      modal: true,
+      buttons: {
+        Confirm: function() {
+          if(!config.url) {
+            container.removeClass('empty');
+            container.html([deleteButton, display]);
+          }
+          config.url = input.val();
+          display.attr('src', config.url);
+          urlform.dialog('close');
+          Weebly.savePage();
+        }
+      }
+    });
+  })
+
   element._delete = {
     button: deleteButton,
     trigger: function() {

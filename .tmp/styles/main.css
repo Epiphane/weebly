@@ -104,6 +104,8 @@
       .page-element .image.empty.delete {
         border-color: #ef7a74;
         background: #FDDEDC; }
+    .page-element .image img {
+      max-width: 100%; }
   .page-element .title {
     position: relative;
     font-size: 32px; }
@@ -176,6 +178,9 @@
     background-position-y: -55px; }
   .page-element .ui-wrapper.delete textarea, .page-element .ui-wrapper.delete .textarea {
     border-color: #ef7a74; }
+
+.image-urlform input[type='text'] {
+  color: #333; }
 
 /* Variables */
 body {
@@ -499,3 +504,14 @@ input[type='text'] {
     opacity: 1; } }
 
 /* Opera < 12.1 */
+
+.ui-dialog {
+  padding: 0 !important; }
+  .ui-dialog .ui-button {
+    background: white !important;
+    margin-left: 0px !important; }
+
+.ui-widget-header {
+  background: #518dca !important;
+  border-radius: 0 !important;
+  border: none !important; }

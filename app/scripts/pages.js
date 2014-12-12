@@ -64,7 +64,7 @@
       return false;
     });
 
-    var savePage = function savePage() {
+    var savePage = Weebly.savePage = function savePage() {
       var page = [];
       currentPage.forEach(function(row) {
         var rowConfig = [];
@@ -103,6 +103,8 @@
       mainButton.addClass('button fade-in page-button page-' + cfg.id);
       mainButton.html(cfg.name);
       mainButton.click(selectPage.bind(this, cfg.id));
+
+      interfaceEdit.click(selectPage.bind(this, cfg.id));
 
       // Setup button
       interfaceDelete.click(function() {

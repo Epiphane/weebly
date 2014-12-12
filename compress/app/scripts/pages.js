@@ -23,7 +23,15 @@
             animate: false
           })
         });
-        selectPage(pages[0].id);
+        if(location.pathname.indexOf('/page/') !== -1)
+          selectPage(parseInt(location.pathname.substr(6), 10));
+        else
+          selectPage(pages[0].id);
+      });
+
+      window.addEventListener('popstate', function(e) {
+        if(location.pathname.indexOf('/page/') !== -1)
+          selectPage(parseInt(location.pathname.substr(6), 10));
       });
     });
 
@@ -33,13 +41,7 @@
       var formData = newPageForm.serializeArray()[0];
       var data = {};
       data[formData.name] = formData.value;
-      data.config = JSON.stringify([
-        {
-          type: "title",
-          text: "Add Title Here",
-          fixed: true
-        }
-      ]);
+      data.config = "[[{\"type\":\"image\",\"fixed\":\"true\"}],[{\"type\":\"title\",\"text\":\"Add title here\",\"fixed\":\"true\"}]]";
 
       Weebly.post({
         url: Weebly.url('pages'),
@@ -62,16 +64,22 @@
       return false;
     });
 
-    var savePage = function savePage() {
+    var savePage = Weebly.savePage = function savePage() {
       var page = [];
-      currentPage.forEach(function(element) {
-        page.push(element.val());
+      currentPage.forEach(function(row) {
+        var rowConfig = [];
+        row.forEach(function(element) {
+          var val = element.val();
+          if(val)
+            rowConfig.push(val);
+        });
+        page.push(rowConfig);
       });
 
       Weebly.put({
         url: Weebly.url('page', selectedPage),
         data: {
-          config: JSON.stringify(page)
+          config: page
         }
       });
     };
@@ -95,6 +103,8 @@
       mainButton.addClass('button fade-in page-button page-' + cfg.id);
       mainButton.html(cfg.name);
       mainButton.click(selectPage.bind(this, cfg.id));
+
+      interfaceEdit.click(selectPage.bind(this, cfg.id));
 
       // Setup button
       interfaceDelete.click(function() {
@@ -181,8 +191,17 @@
             data.config = JSON.parse(data.config.replace(/\n/g, '\\n'));
             pageCache[id] = data;
             buildPage();
+          })
+          .error(function(data) {
+            if(data.status === 404) {
+              history.replaceState('Page ' + pages[0].id, 'Weebly', '/page/' + pages[0].id);
+              selectPage(pages[0].id);
+            }
           });
         }
+
+        if(location.pathname !== '/page/' + id)
+          history.pushState('Page ' + id, 'Weebly', '/page/' + id);
       }
     };
 
@@ -192,30 +211,52 @@
       }
 
       currentPage = [];
-      page.config.forEach(function(element) {
-        currentPage.push(Weebly.element(element));
+      page.config.forEach(function(rowConfig) {
+        var row = [];
+        rowConfig.forEach(function(element) {
+          row.push(Weebly.element(element));
+        });
+        if(row.length > 0)
+          currentPage.push(row);
       });
 
       // Create DOM
+      var elToInit = [];
       pageContainer.empty();
-      currentPage.forEach(function(element) {
-        pageContainer.append(element.container);
+      currentPage.forEach(function(row) {
+        var rowContainer = $('<div class="page-row"></div>');
+        row.forEach(function(element) {
+          rowContainer.append(element.container);
 
-        initElement(element);
+          elToInit.push(element);
+        });
+        pageContainer.append(rowContainer);
       });
+
+      elToInit.forEach(function(el) { initElement(el); });
     };
 
     var initElement = function(element) {
       element.init();
+      Weebly.Draggable(element.container, moveElement.bind(element));
       element.container.click(editElement.bind(this, element));
       if(element._delete.button) {
         element._delete.button.click(function() {
           if(element._delete.trigger()) {
             // if it returns true: actually delete element
-            currentPage.splice(currentPage.indexOf(element), 1);
-            element.container.fadeOut(function() {
-              element.container.remove();
-            });
+            var rowIndex = element.container.parent().index();
+            if(element.container.parent().children().length === 1) {
+              currentPage.splice(rowIndex, 1);
+              element.container.parent().fadeOut(function() {
+                element.container.parent().remove();
+              });
+            }
+            else {
+              currentPage[rowIndex].splice(element.container.index(), 1);
+              element.container.fadeOut(function() {
+                element.container.remove();
+              });
+            }
 
             savePage();
           }
@@ -227,94 +268,191 @@
             element.editing = false;
             element._delete.cancel();
             element.finalize();
+            element.container.attr('no-drag', 'false');
             savePage(); 
           }
         }
       });
     };
 
-    var editElement = function (element) {
+    Weebly.finalizeAll = function() {
       var needsSave = false;
-      currentPage.forEach(function(other) {
-        if(other.editing) {
-          other.editing = false;
-          other.finalize();
-          needsSave = true;
-        }
+      currentPage.forEach(function(row) {
+        row.forEach(function(other) {
+          if(other.editing) {
+            other.editing = false;
+            other.finalize();
+            other.container.attr('no-drag', 'false');
+            needsSave = true;
+          }
+        });
       });
 
       if(needsSave) {
         savePage(); 
       }
+    };
 
+    var editElement = function (element) {
+      Weebly.finalizeAll();
+
+      element.container.attr('no-drag', 'true');
       element.editing = true;
       element.edit();
-    }
+    };
 
-    var elements;
-    // Show where an element belongs in the page
-    Weebly.showElementPlace = function(loc) {
-      $('.page-element').removeClass('border-top border-bottom');
+    var findElementPlace = function(loc) {
+      $('.page-row, .page-element').removeClass('border-top border-bottom border-right');
+      $('#placeholder').remove();
 
       var pageOffset = pageContainer.offset();
       if(loc.x < pageOffset.left || loc.y < pageOffset.top){
-        return;
+        return false;
       }
 
-      var ndx;
-      for(ndx = 0; ndx < currentPage.length; ndx ++) {
-        var elemOffset = currentPage[ndx].container.offset();
-        var elemHalfHeight = currentPage[ndx].container.height() / 2;
-        if(loc.y <= elemOffset.top + elemHalfHeight) {
-          currentPage[ndx].container.addClass('border-top');
-          return;
+      var rows = $('.page-row');
+      for(var i = 0; i < rows.length; i ++) {
+        row = $(rows[i]);
+        var offset = row.offset();
+        var height = row.height();
+
+        if(loc.y <= offset.top + 10) {
+          return { ndx: i, newRow: true, appendBefore: row };
+        }
+        else if(loc.y <= offset.top + height - 10) {
+          var ndx = [i, 0];
+          var appendAfter;
+
+          var children = row.children();
+          for(var child = 0; child < children.length; child ++) {
+            var childEl = $(children[child]);
+            if(loc.x > childEl.offset().left + childEl.width() / 2) {
+              ndx[1] = child + 1;
+              appendAfter = childEl;
+            }
+          }
+
+          return { ndx: ndx, newRow: false, appendAfter: appendAfter };
         }
       }
-      // Nothing picked, we're below the page
-      currentPage[ndx - 1].container.addClass('border-bottom');
+      return { ndx: i, newRow: true, appendAfter: rows.last() };
+    };
+
+    // Show where an element belongs in the page
+    Weebly.showElementPlace = function(loc) {
+      var row = findElementPlace(loc);
+      if(row === false)
+        return;
+      else if(row.newRow) {
+        if(row.appendBefore)
+          row.appendBefore.addClass('border-top');
+        else // Nothing picked, we're below the pag
+          row.appendAfter.addClass('border-bottom');
+      }
+      else if(row.appendAfter) {
+        row.appendAfter.addClass('border-right');
+        var placeholder = $('<div id="placeholder" class="page-element"></div>');
+        placeholder.insertAfter(row.appendAfter);
+      }
     };
 
     // Place an element in the page
-    Weebly.placeElement = function(cfg) {
-      $('.page-element').removeClass('border-top border-bottom');
-
-      var pageOffset = pageContainer.offset();
-      if(cfg.x < pageOffset.left || cfg.y < pageOffset.top){
+    Weebly.placeNewElement = function(cfg) {
+      var row = findElementPlace(cfg);
+      if(row === false)
         return;
-      }
+      else {
+        var newElement = Weebly.element({
+          type: cfg.element.attr('element-type')
+        });
 
-      var ndx;
-      for(ndx = 0; ndx < currentPage.length; ndx ++) {
-        var elemOffset = currentPage[ndx].container.offset();
-        var elemHalfHeight = currentPage[ndx].container.height() / 2;
-        if(cfg.y <= elemOffset.top + elemHalfHeight) {
-          // Only add before me if possible
-          if(currentPage[ndx].container.hasClass('dynamic') ||
-             ndx > 0 && currentPage[ndx - 1].container.hasClass('dynamic')) {
-            var newElement = Weebly.element({
-              type: cfg.element.attr('element-type')
-            });
+        var container = newElement.container;
+        if(row.newRow) {
+          container = $('<div class="page-row"></div>');
+          container.append(newElement.container);
 
-            newElement.container.insertBefore(currentPage[ndx].container);
-            currentPage.splice(ndx, 0, newElement);
-
-            initElement(newElement);
-            editElement(newElement);
+          if(row.appendBefore) {
+            container.insertBefore(row.appendBefore);
+            currentPage.splice(row.ndx, 0, [newElement]);
           }
-          return;
+          else { // Nothing picked, we're below the page
+            pageContainer.append(container);
+            currentPage.push([newElement]);
+          }
         }
+        else {
+          container.insertAfter(row.appendAfter);
+          currentPage[row.ndx[0]].splice(row.ndx[1], 0, newElement);
+        }
+
+        initElement(newElement);
+        editElement(newElement);
+        savePage();
       }
+    };
 
-      // Nothing picked, we're below the page
-      var newElement = Weebly.element({
-        type: cfg.element.attr('element-type')
-      });
+    var moveElement = function (loc, element) {
+      var lastRowIndex = this.container.parent().index();
+      var row = findElementPlace(loc);
 
-      pageContainer.append(newElement.container);
-      currentPage.push(newElement);
+      if(row === false)
+        return;
+      else {
+        var parentRow = this.container.parent();
+        if(row.newRow) {
+          if(parentRow.children().length === 1 &&
+            (row.appendBefore && row.appendBefore.index() === parentRow.index()
+            || row.appendAfter && row.appendAfter.index() === parentRow.index()))
+            return;
+        }
+        else {
+          if(!row.appendAfter && this.container.index() === 0
+            || row.ndx[1] - 1 === this.container.index() && parentRow.index() === row.ndx[0])
+            return;
 
-      initElement(newElement);
-      editElement(newElement);
+        }
+
+        if(parentRow.children().length > 1) {
+          // We're not the only ones in this row - move just me
+          currentPage[lastRowIndex].splice(this.container.index(), 1);
+          this.container.remove();
+        }
+        else {
+          // Remove the whole row
+          parentRow.remove();
+          currentPage.splice(lastRowIndex, 1);
+
+          if(typeof(row.ndx) === 'number' && row.ndx > lastRowIndex) row.ndx --;
+          if(typeof(row.ndx) === 'object' && row.ndx[0] > lastRowIndex) row.ndx[0] --;
+        }
+
+        var container = this.container;
+        if(row.newRow) {
+          container = $('<div class="page-row"></div>');
+          container.append(this.container);
+        
+          if(row.appendBefore) {
+            container.insertBefore(row.appendBefore);
+            currentPage.splice(row.ndx, 0, [this]);
+          }
+          else {
+            container.insertAfter(row.appendAfter);
+            currentPage.push([this]);
+          }
+        }
+        else {
+          if(row.appendAfter) {
+            this.container.insertAfter(row.appendAfter);
+          }
+          else {
+            $('.page-row').eq(row.ndx[0]).prepend(this.container);
+          }
+          currentPage[row.ndx[0]].splice(row.ndx[1], 0, this);
+        }
+
+        initElement(this);
+        savePage();
+      }
     };
   });
 })();

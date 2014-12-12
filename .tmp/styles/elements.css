@@ -48,6 +48,8 @@
       .page-element .image.empty.delete {
         border-color: #ef7a74;
         background: #FDDEDC; }
+    .page-element .image img {
+      max-width: 100%; }
   .page-element .title {
     position: relative;
     font-size: 32px; }
@@ -120,3 +122,6 @@
     background-position-y: -55px; }
   .page-element .ui-wrapper.delete textarea, .page-element .ui-wrapper.delete .textarea {
     border-color: #ef7a74; }
+
+.image-urlform input[type='text'] {
+  color: #333; }

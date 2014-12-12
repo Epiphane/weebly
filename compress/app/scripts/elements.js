@@ -1,64 +1,15 @@
 $(document).on('authToken.received', function() {
-  var selectedElement = null;
   var mouseOffset = null;
 
-  $('.draggable').click(function(event) {
-    event.stopPropagation();
-
-    var draggable = $(this);
-    var elementPosition = draggable.offset();
-
-    mouseOffset = {
-      x: event.clientX - elementPosition.left,
-      y: event.clientY - elementPosition.top,
-    };
-
-    draggable.css('opacity', '0');
-    selectedElement = draggable.clone();
-    selectedElement.addClass('dragging')
-      .css('opacity', '0.5')
-      .animate({
-        opacity: 1
-      }, 250);
-
-    $('body').append(selectedElement).mousemove(updateElement);
-    $('body').click(function(e) {
-      e.stopPropagation();
-
-      moveElementToMouse(e);
-      placeElement(e);
-
-      draggable.css('opacity', '1');
-      selectedElement.remove();
-      $('body').off('mousemove click');
+  var placeNewElement = function placeNewElement(loc, element) {
+    Weebly.placeNewElement({
+      element: element,
+      x: loc.x,
+      y: loc.y
     });
-
-    moveElementToMouse(event);
-  });
-
-  var placeElement = function placeElement(event) {
-    Weebly.placeElement({
-      element: selectedElement,
-      x: event.clientX,
-      y: event.clientY
-    });
-  }
-
-  var updateElement = function updateElement(event) {
-    moveElementToMouse(event);
-
-    Weebly.showElementPlace({
-      x: event.clientX,
-      y: event.clientY
-    });
-  }
-
-  var moveElementToMouse = function moveElementToMouse(event) {
-    selectedElement.css({
-      left: event.clientX - mouseOffset.x,
-      top: event.clientY - mouseOffset.y
-    })
   };
+
+  Weebly.Draggable($('.draggable'), placeNewElement);
 
   // Create different elements
   Weebly.element = function createElement(config) {
@@ -86,6 +37,7 @@ $(document).on('authToken.received', function() {
 
 var TextElement = function(config) {
   var element = {};
+  var textMinHeight = 120;
 
   // Elements we keep track of:
   // |container|
@@ -101,13 +53,13 @@ var TextElement = function(config) {
     type += ' text';
   }
   if(!config.text) {
-    config.text = '';
+    config.text = ' ';
   }
 
   container = $('<div class="' + type + '"></div>');
 
   // Create main divs
-  if(!config.fixed) {
+  if(!config.fixed || config.fixed === 'false') {
     deleteButton = $('<div class="delete-element text"></div>');    
   }
   display = $('<div class="' + type + '"></div>');
@@ -121,10 +73,17 @@ var TextElement = function(config) {
   display.html(config.text.replace(/\n/g, '<br>'));
   textarea.html(config.text);
   sizer.html(config.text.replace(/\n/g, '<br>') + '<br>');
+  // sizer.css({display: 'block'
+  // });
 
   // Put 'em in, hoo hah
   container.append([display, textarea, sizer]);
+  if(config.height) {
+    element.customHeight = config.height;
+    display.height(config.height);
+  }
 
+  element.custom = true;
   element.container = container;
   element._delete = {
     button: deleteButton,
@@ -154,25 +113,37 @@ var TextElement = function(config) {
   element.init = function init() {
     textarea.width(display.width() - 48);
     textarea.resizable({
-      handles: 'e, s, w',
-      maxWidth: display.width() - 40
+      handles: 's',
+      maxWidth: display.width() - 40,
+      minHeight: textMinHeight,
+      resize: function() {
+        if(!element.custom) {
+          textarea.val(Weebly.LoremIpsum(textarea.height() / 21));
+        }
+      },
+      stop: function(e, ui) {
+        if(textarea.height() < sizer.height()) {
+          textarea.height(sizer.height());
+          ui.element.height(sizer.height() + 44);
+          delete element.customHeight;
+        }
+        else {
+          element.customHeight = textarea.height();
+        }
+      }
     });
   
     textarea.parent().hide();
-    deleteButton.appendTo(textarea.parent());
+    if(deleteButton)
+      deleteButton.appendTo(textarea.parent());
   };
   
   // Edit the textarea
   element.edit = function edit() {
-    textarea.height(display.height() + 16);
     if(textarea.parent().width() > display.width('100%').width()) {
       textarea.parent().width(display.width());
       textarea.width(display.width() - 44);
     }
-    textarea.resizable({
-      handles: 'e, s, w',
-      maxWidth: display.width()
-    });
 
     display.hide();
     textarea.parent().show();
@@ -182,26 +153,56 @@ var TextElement = function(config) {
   };
 
   element.finalize = function finalize() {
-    display.html(textarea.val().replace(/\n/g, '<br>')).show();
+    display.html(textarea.val().replace(/\n/g, '<br>') + '<br>').show();
+    if(element.customHeight)
+      display.height(element.customHeight);
+    else
+      display.height('auto');
+
     textarea.parent().hide();
   };
 
   element.val = function val() {
-    return {
+    if($.trim(textarea.val()) === '')
+      return false;
+
+    var val = {
       type: config.type,
       text: textarea.val(),
       fixed: !!config.fixed
     };
+    if(element.customHeight)
+      val.height = element.customHeight;
+
+    return val;
   };
 
   var resizeTextarea = function resizeTextarea() {
     sizer.width(textarea.width());
-    textarea.height(sizer.height());
-    textarea.parent().height(sizer.height() + 44);
+
+    sizer.width();
+    var textHeight = sizer.height();
+    if(textHeight < textMinHeight)
+      textHeight = textMinHeight;
+    if(textHeight < element.customHeight)
+      textHeight = element.customHeight;
+
+
+    textarea.height(textHeight);
+    textarea.parent().height(textHeight + 44);
+
+    if($.trim(textarea.val()) === '') {
+      // Fill it with lorem ipsum baby
+      element.custom = false;
+    }
   }
 
   textarea.keyup(function(event) {
+    if(textarea.val().length === 0)
+      textarea.val(' ');
+
     sizer.html(textarea.val().replace(/\n/g, '<br>') + '<br>');
+    element.custom = true;
     resizeTextarea();
   });
 
@@ -321,6 +322,7 @@ var ImageElement = function(config) {
   container = $('<div class="' + type + '"></div>');
 
   // Create main divs
+  if(config.fixed === 'false') config.fixed = false;
   if(!config.fixed) {
     deleteButton = $('<div class="delete-element image"></div>');    
   }
@@ -349,6 +351,29 @@ var ImageElement = function(config) {
   }
 
   element.container = container;
+  element.container.dblclick(function() {
+    var urlform = $('<div class="image-urlform">New URL: </div>');
+    var input = $('<input type="text" />');
+    input.val(config.url);
+
+    urlform.append(input);
+    urlform.dialog({
+      modal: true,
+      buttons: {
+        Confirm: function() {
+          if(!config.url) {
+            container.removeClass('empty');
+            container.html([deleteButton, display]);
+          }
+          config.url = input.val();
+          display.attr('src', config.url);
+          urlform.dialog('close');
+          Weebly.savePage();
+        }
+      }
+    });
+  })
+
   element._delete = {
     button: deleteButton,
     trigger: function() {
@@ -381,6 +406,7 @@ var ImageElement = function(config) {
   // Edit the textarea
   element.edit = function edit() {
     element.editing = false;
+    element.container.attr('no-drag', 'false');
   };
 
   element.finalize = function finalize() {

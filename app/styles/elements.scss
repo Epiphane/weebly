@@ -77,6 +77,10 @@ $weebly-element-font: #4f657b;
         background: $weebly-lighter-red;
       }
     }
+
+    img {
+      max-width: 100%;
+    }
   }
 
   .title {
@@ -188,5 +192,11 @@ $weebly-element-font: #4f657b;
         border-color: $weebly-border-red;
       }
     }
+  }
+}
+
+.image-urlform {
+  input[type='text'] {
+    color: #333;
   }
 }

@@ -7,28 +7,50 @@ $weebly-lighter-red: #FDDEDC;
 $weebly-border-blue: #7fc1ff;
 $weebly-element-font: #4f657b;
 
-.page-element {
+.page-row {
   padding-top: 20px;
   padding-bottom: 20px;
   width: 100%;
   float: left;
+  display: table;
+  table-layout: fixed;
 
-  &.dynamic {
-    position: relative;
-
-    &.border-top {
-      border-top: 2px dashed $weebly-border-blue;
-      padding-top: 18px;
-    }
+  &.border-top {
+    border-top: 2px dashed $weebly-border-blue;
+    padding-top: 18px;
   }
 
   &.border-bottom {
     border-bottom: 2px dashed $weebly-border-blue;
     padding-bottom: 18px;
   }
+}
+
+.page-element {
+  width: 2%;
+  display: table-cell;
+  padding: 0 5px;
+  vertical-align: top;
+  word-wrap: break-word;
+
+  &.border-right {
+    border-right: 2px dashed $weebly-border-blue;
+    padding-right: 3px;
+  }
+
+  &.dragging {
+    background: #fff;
+    padding: 5px;
+    width: auto;
+
+    .image.empty {
+      min-width: 300px;
+    }
+  }
 
   .image {
     text-align: center;
+    position: relative;
 
     &.empty {
       min-height: 280px;
@@ -37,7 +59,11 @@ $weebly-element-font: #4f657b;
       border-radius: 4px;
 
       .placeholder {
-        margin-top: 74px;
+        position: absolute;
+        margin-left: -52px;
+        left: 50%;
+        top: 50%;
+        margin-top: -65px;
       
         .muted {
           font-size: 14px;
@@ -51,9 +77,14 @@ $weebly-element-font: #4f657b;
         background: $weebly-lighter-red;
       }
     }
+
+    img {
+      max-width: 100%;
+    }
   }
 
   .title {
+    position: relative;
     font-size: 32px;
   }
 
@@ -100,15 +131,19 @@ $weebly-element-font: #4f657b;
     background-position: -5px -10px;
 
     &.title {
-      right: -2px;  
+      right: -2px;
+      top: 0;
     }
     &.text {
-      right: 4px;  
+      right: 0;  
       top: 0;
     }
     &.image {
       background-position-x: -91px;
-      right: 0;
+      position: relative;
+      right: -100%;
+      margin-left: -40px;
+      top: -2px;
     }
 
     &.confirm { 
@@ -157,5 +192,11 @@ $weebly-element-font: #4f657b;
         border-color: $weebly-border-red;
       }
     }
+  }
+}
+
+.image-urlform {
+  input[type='text'] {
+    color: #333;
   }
 }

@@ -1,7 +1,5 @@
-var Weebly = {};
-
 (function() {
-	var host = "/api/";
+	var host = "http://weebly.thomassteinke.com/api/";
 	var api_token = null;
 	var google_url = '';
 

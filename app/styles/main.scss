@@ -532,3 +532,18 @@ input[type='text'] {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+.ui-dialog {
+  padding: 0!important;
+  
+  .ui-button {
+    background: white!important;
+    margin-left: 0px!important;
+  }
+}
+
+.ui-widget-header {
+  background: #518dca!important;
+  border-radius: 0!important;
+  border: none!important;
+}
